@@ -144,7 +144,6 @@ export const deleteAdminAccount = async (req, res) => {
 
 export const checkAdmin = async(req,res,next)=>{
   try {
-    res.clearCookie('token')
     res.json({ success:true, message:"Admin authorized" })
     
   } catch (error) {

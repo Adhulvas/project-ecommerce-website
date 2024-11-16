@@ -32,6 +32,7 @@ export const userSignup  = async(req,res)=>{
   }
 }
 
+
 export const userLogin = async(req,res)=>{
   try {
     const {email,password} = req.body
@@ -96,16 +97,16 @@ export const userLogout = async(req,res,next)=>{
 
 export const updateUserProfile = async (req,res)=>{
   try {
-    const { name, email, mobileNumber } = req.body;
     const userId = req.user.id;
+    const { name, email, mobileNumber,address } = req.body;
 
-    if (!name || !email || !mobileNumber) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (!name && !email && !mobileNumber) {
+      return res.status(400).json({ message: 'At least one field is required to update' });
     }
 
     const user = await User.findByIdAndUpdate(
       userId,
-      { name, email, mobileNumber },
+      { name, email, mobileNumber, address },
       { new: true, runValidators: true }
     );
 
@@ -116,16 +117,14 @@ export const updateUserProfile = async (req,res)=>{
     res.status(200).json({ success:true, message:'Profile updated successfully',user });
 
   } catch (error) {
-    res.status(500).json({ message:'Server error', error });
+    res.status(500).json({ message:'Server error', error:error.message });
   }
 };
-
 
 
 export const deleteUserAccount = async (req,res) => {
   try {
     const userId = req.user.id;
-
 
     const deletedUser = await User.findByIdAndDelete(userId);
 
@@ -142,13 +141,9 @@ export const deleteUserAccount = async (req,res) => {
 };
 
 
-
-
 export const checkUser = async(req,res,next)=>{
   try {
-    res.clearCookie('token')
-    res.json({ success:true, message:"user authorized" })
-    
+    res.json({ success:true, message:"user authorized" }) 
   } catch (error) {
     res.status(500).json({message:error.message || "Internal server error"})
   }

@@ -144,7 +144,6 @@ export const deleteSellerAccount = async (req, res) => {
 
 export const checkSeller = async(req,res,next)=>{
   try {
-    res.clearCookie('token')
     res.json({ success:true, message:"seller authorized" })
     
   } catch (error) {
