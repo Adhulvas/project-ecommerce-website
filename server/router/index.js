@@ -12,5 +12,6 @@ router.use('/admin',adminRouter)
 router.use('/seller',sellerRouter)
 router.use('/product',productRouter)
 router.use('/cart',cartRouter)
+router.use
 
 export {router as apiRouter}

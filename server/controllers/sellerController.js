@@ -96,16 +96,16 @@ export const sellerLogout = async(req,res,next)=>{
 
 export const updateSellerProfile = async (req,res,next)=>{
   try {
-    const { name, email, mobileNumber } = req.body;
+    const { name, email, mobileNumber, address } = req.body;
     const sellerId = req.seller.id;
 
-    if (!name || !email || !mobileNumber) {
+    if (!name && !email && !mobileNumber) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
     const seller = await Seller.findByIdAndUpdate(
       sellerId,
-      { name, email, mobileNumber },
+      { name, email, mobileNumber, address },
       { new: true, runValidators: true }
     );
 

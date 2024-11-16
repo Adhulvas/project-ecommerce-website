@@ -11,7 +11,7 @@ export const sellerAuth = (req,res,next)=>{
     const decodedToken = jwt.verify(token,process.env.JWT_PASSWORD)
 
     if(!decodedToken){
-      return res.status(401).json({message:'admin not authorized'})
+      return res.status(401).json({message:'seller not authorized'})
     }
 
     if(decodedToken.role !== 'seller' && decodedToken.role !== 'admin'){

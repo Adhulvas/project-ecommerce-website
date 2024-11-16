@@ -1,11 +1,11 @@
 import { Cart } from "../models/cartModel.js"
 import { Product } from "../models/productModel.js"
+import { User } from "../models/userModel.js"
 
 
 export const getCart= async(req,res)=>{
   try {
     const userId = req.user.id
-    // console.log(userId)
 
     const cart = await Cart.findOne({userId}).populate('items.productId')
 
@@ -67,3 +67,37 @@ export const addToCart = async (req, res) => {
     res.status(500).json({ message: 'Failed to add product to cart', error });
   }
 };
+
+
+export const removeCartProduct = async(req,res)=>{
+  try {
+    const userId = req.user.id
+    const {productId} = req.body
+
+    let cart = await Cart.findOne({userId})
+
+    if(!cart){
+      return res.status(404).json({ message: 'Cart not found'})
+    }
+    
+    const itemIndex = await cart.items.findIndex(item=> item.productId.toString() === productId)
+
+    if(itemIndex === -1){
+      return res.status(404).json({ message:"Item not found in the cart"})
+    }
+
+    cart.items.splice(itemIndex,1)
+
+    await cart.populate('items.productId');
+    await cart.calculateTotalPrice();
+
+    await cart.save()
+
+    res.status(200).json({message:'item removed from the cart',cart})
+  }
+  catch (error) {
+    console.log(error);
+    
+    res.status(500).json({message:'Failed to remove item from cart'})
+  }
+}

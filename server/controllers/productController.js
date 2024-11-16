@@ -36,8 +36,6 @@ export const addNewProduct = async(req,res)=>{
       return res.status(400).json({message:'All fields required'})
     } 
 
-    // console.log(req.file,'==========req.file');
-
     const imageUrl = (await cloudinaryInstance.uploader.upload(req.file.path)).url
 
     const newProduct = new Product({ name,description,price,category,brand,image:imageUrl,seller:sellerId});

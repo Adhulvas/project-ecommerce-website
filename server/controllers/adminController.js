@@ -96,16 +96,16 @@ export const adminLogout = async(req,res,next)=>{
 
 export const updateAdminProfile = async (req,res,next)=>{
   try {
-    const { name, email, mobileNumber } = req.body;
+    const { name, email, mobileNumber, address } = req.body;
     const adminId = req.admin.id;
 
-    if (!name || !email || !mobileNumber) {
+    if (!name && !email && !mobileNumber) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
     const admin = await Admin.findByIdAndUpdate(
       adminId,
-      { name, email, mobileNumber },
+      { name, email, mobileNumber, address },
       { new: true, runValidators: true }
     );
 
