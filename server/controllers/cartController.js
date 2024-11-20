@@ -35,12 +35,16 @@ export const getCart= async(req,res)=>{
 export const addToCart = async (req, res) => {
   try {
     const userId = req.user.id
-    const { productId, quantity } = req.body;
+    const { productId, size, quantity } = req.body;
 
 
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
+    }
+
+    if (product.sizeRequired && !size) {
+      return res.status(400).json({ message: 'Please select a size' });
     }
 
 
@@ -49,12 +53,13 @@ export const addToCart = async (req, res) => {
       cart = new Cart({ userId, items: [] });
     }
 
-    const existingItem = cart.items.find(item => item.productId.toString() === productId);
+    const existingItem = cart.items.find(
+      (item) => item.productId.toString()===productId && (!product.sizeRequired || item.size === size))
 
     if(existingItem) {
       existingItem.quantity += quantity;
     } else {
-      cart.items.push({ productId, quantity });
+      cart.items.push({ productId, size:product.sizeRequired? size:null, quantity });
     }
 
     await cart.populate('items.productId')
@@ -63,8 +68,7 @@ export const addToCart = async (req, res) => {
 
     res.status(200).json({ message: 'Product added to cart', cart });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to add product to cart', error });
+    res.status(500).json({ message: 'Failed to add product to cart' });
   }
 };
 

@@ -11,7 +11,11 @@ const cartItemsSchema = new mongoose.Schema({
     required:true,
     default:1,
     min:1
-}
+  },
+  size:{
+    type:String,
+    required:false
+  }
 })
 
 const cartSchema = mongoose.Schema(
