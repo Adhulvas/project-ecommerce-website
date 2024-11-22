@@ -15,6 +15,10 @@ export const userAuth = (req,res,next)=>{
     }
 
     req.user = decodedToken
+
+    if(decodedToken.role !== 'user') {
+      return res.status(403).json({ message: 'Access forbidden, only users are allowed' });
+    }
     next()
     
   } catch (error) {

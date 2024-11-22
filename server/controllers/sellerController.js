@@ -4,9 +4,9 @@ import { generateToken } from "../utils/token.js"
 
 export const sellerSignup  = async(req,res,next)=>{
   try {
-    const {name,email,password,storeName}=req.body
+    const {name,email,password}=req.body
 
-    if(!name || !email || !password || !storeName){
+    if(!name || !email || !password){
       return res.status(400).json({message:'all fields required'})
     }
 
@@ -18,7 +18,7 @@ export const sellerSignup  = async(req,res,next)=>{
 
     const hashPassword = bcrypt.hashSync(password, 10);
 
-    const newSeller = new Seller({name,email,password:hashPassword,storeName})
+    const newSeller = new Seller({name,email,password:hashPassword})
     await newSeller.save()
 
     const token = generateToken(newSeller,'seller')
