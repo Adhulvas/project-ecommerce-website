@@ -3,19 +3,28 @@ import { Product } from "../models/productModel.js"
 import { Category } from "../models/categoryModel.js";
 
 
-export const getProductsBySubcategory = async (req, res) => {
-  try {
-    const { subcategoryName } = req.params
 
-    const category = await Category.findOne({ 'subcategories.name': subcategoryName })
+export const getProductsByCategory = async (req, res) => {
+  try {
+    const { categoryName, subcategoryName } = req.params;
+
+    // Find the category by name
+    const category = await Category.findOne({
+      name: categoryName,
+      'subcategories.name': subcategoryName,
+    });
 
     if (!category) {
-      return res.status(404).json({ message: 'Subcategory not found' });
+      return res.status(404).json({ message: 'Category or Subcategory not found' });
     }
 
-    const products = await Product.find({ subcategory: subcategoryName })
+    // Fetch products matching the category and subcategory
+    const products = await Product.find({
+      category: categoryName,
+      subcategory: subcategoryName,
+    })
       .populate('seller', 'name')
-      .populate('subcategory', 'name')
+      .populate('subcategory', 'name');
 
     if (products.length === 0) {
       return res.status(404).json({ message: 'No products found in this subcategory' });
@@ -29,6 +38,7 @@ export const getProductsBySubcategory = async (req, res) => {
 }
 
 
+
 export const getProductDetails = async(req,res)=>{
   try {
     const {productId} = req.params
@@ -38,7 +48,9 @@ export const getProductDetails = async(req,res)=>{
       return res.status(404).json({ message:'product not found'})
     }
 
-    res.json({message:'product details fetched', data:productData})
+    const totalRatings = productData.reviews ? productData.reviews.length : 0;
+
+    res.json({message:'product details fetched', data:productData, totalRatings})
     
   } catch (error) {
     res.status(500).json({ message: error.message || 'Internal server error' })
@@ -70,12 +82,12 @@ export const addNewProduct = async (req,res)=> {
       return res.status(404).json({ message: 'Subcategory not found' });
     }
 
-    const existingProduct = await Product.findOne({ name, description, category, price });
+    const imageUrl = (await cloudinaryInstance.uploader.upload(req.file.path)).url;
+
+    const existingProduct = await Product.findOne({ name, description, category, price, image:imageUrl });
     if (existingProduct) {
       return res.status(409).json({ message: 'Product already exists' });
     }
-
-    const imageUrl = (await cloudinaryInstance.uploader.upload(req.file.path)).url;
 
     const newProduct = new Product({
       name,

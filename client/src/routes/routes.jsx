@@ -10,13 +10,16 @@ import { ProductDetail } from "../pages/user/ProductDetail";
 import { ProductListing } from "../pages/user/productListing";
 import { Signup } from "../pages/shared/Signup";
 import { Login } from "../pages/shared/Login";
-import { UserAccount } from "../pages/user/UserAccount";
 import { UserLayout } from "../layout/userLayout";
+import { ErrorPage } from "../pages/shared/ErrorPage";
+import { ProtectedRoutes } from "./ProtectedRoutes";
+import { ProfilePage } from "../pages/user/ProfilePage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <UserLayout/>,
+    errorElement: <ErrorPage/>,
     children: [
       {
         path: "",
@@ -35,29 +38,35 @@ export const router = createBrowserRouter([
         element: <About/>,
       },
       {
-        path: "userAccount",
-        element: <UserAccount/>,
-      },
-      {
         path: "contact",
         element: <Contact/>,
       },
       {
-        path: "cart",
-        element: <Cart/>,
-      },
-      {
-        path: "wishlist",
-        element: <Wishlist/>,
-      },
-      {
-        path: "productListing",
+        path: "categories/:categoryName/:subcategoryName",
         element: <ProductListing/>,
       },
       {
-        path: "productDetail/:id",
+        path: "productDetails/:productId",
         element: <ProductDetail/>,
       },
+      {
+        element:<ProtectedRoutes/>,
+        path:'user',  
+        children: [
+          {
+            path: "profile",
+            element: <ProfilePage/>,
+          },
+          {
+            path: "cart",
+            element: <Cart/>,
+          },
+          {
+            path: "wishlist",
+            element: <Wishlist/>,
+          },
+        ]
+      }
     ]
   },
 ]);

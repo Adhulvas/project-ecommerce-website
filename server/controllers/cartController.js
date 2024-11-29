@@ -1,3 +1,4 @@
+import { response } from "express"
 import { Cart } from "../models/cartModel.js"
 import { Product } from "../models/productModel.js"
 import { User } from "../models/userModel.js"
@@ -6,6 +7,7 @@ import { User } from "../models/userModel.js"
 export const getCart= async(req,res)=>{
   try {
     const userId = req.user.id
+    
 
     const cart = await Cart.findOne({userId}).populate('items.productId')
 
@@ -27,7 +29,8 @@ export const getCart= async(req,res)=>{
       totalPrice:cart.totalPrice
     })
   } catch (error) {
-    res.status(500).json({message:'Internal server error'})
+    console.error("Error fetching cart:", error);
+    res.status(500).json({message:'Internal server error',error:error.message})
   }
 }
 

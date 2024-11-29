@@ -37,7 +37,7 @@ export const addReview = async(req, res)=> {
     const review = {
       user: userId,
       name: user.name,
-      rating: Number(rating),
+      rating: String(rating),
       comment
     };
     console.log(review)
