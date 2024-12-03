@@ -12,11 +12,11 @@ import { Cart } from "../pages/user/Cart";
 import { ProfilePage } from "../pages/user/ProfilePage";
 import { SellerLayout } from "../layout/SellerLayout";
 import { ListCategories } from "../pages/admin/ListCategories";
-import { UserLayout } from "../layout/userLayout";
-import { AdminLayout } from "../layout/adminLayout";
+import { UserLayout } from "../layout/UserLayout";
+import { AdminLayout } from "../layout/AdminLayout";
 import { SellerDashboard } from "../pages/seller/SellerDashboard";
 import { DashBoard } from "../pages/admin/DashBoard";
-import { ProductListing } from "../pages/user/productListing";
+import { ProductListing } from "../pages/user/ProductListing";
 
 export const router = createBrowserRouter([
   {
