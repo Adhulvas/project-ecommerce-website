@@ -23,7 +23,11 @@ export const sellerSignup  = async(req,res,next)=>{
 
     const token = generateToken(newSeller,'seller')
 
-    res.cookie('token',token)
+    res.cookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
 
     res.status(200).json({ success:true, message:'signup successful' })
 
@@ -54,7 +58,11 @@ export const sellerLogin = async(req,res,next)=>{
 
     const token = generateToken(sellerExist,'seller')
 
-    res.cookie('token',token)
+    res.cookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
 
     res.json({ success:true, message:'Login successful' })
 
@@ -85,7 +93,11 @@ export const sellerProfile = async(req,res,next)=>{
 
 export const sellerLogout = async(req,res,next)=>{
   try {
-    res.clearCookie('token')
+    res.clearCookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
     res.json({ success:true, message:"Logout successful" })
     
   } catch (error) {
@@ -132,7 +144,11 @@ export const deleteSellerAccount = async (req, res) => {
       return res.status(404).json({ message: 'Seller not found' });
     }
 
-    res.clearCookie('token')
+    res.clearCookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
 
     res.status(200).json({ success:true, message:'Account deleted successfully' });
   } catch (error) {

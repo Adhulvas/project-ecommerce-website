@@ -23,7 +23,11 @@ export const userSignup  = async(req,res)=>{
 
     const token = generateToken(newUser,'user')
 
-    res.cookie('token',token)
+    res.cookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
 
     res.status(200).json({ success:true, message:'signup successful' })
 
@@ -55,7 +59,11 @@ export const userLogin = async(req,res)=>{
 
     const token = generateToken(userExist,'user')
 
-    res.cookie('token',token)
+    res.cookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
 
     res.json({ success:true, message:'Login successful' })
 
@@ -86,7 +94,11 @@ export const userProfile = async(req,res)=>{
 
 export const userLogout = async(req,res,next)=>{
   try {
-    res.clearCookie('token')
+    res.clearCookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
     res.json({ success:true, message:"Logout successful" })
     
   } catch (error) {
@@ -132,7 +144,11 @@ export const deleteUserAccount = async (req,res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.clearCookie('token')
+    res.clearCookie('token',token, {
+      sameSite: "None",
+      secure: true,
+      httpOnly: true,
+    })
 
     res.status(200).json({ success:true, message:'Account deleted successfully' });
   } catch (error) {
