@@ -14,7 +14,7 @@ import { SellerLayout } from "../layout/SellerLayout";
 import { ListCategories } from "../pages/admin/ListCategories";
 import { UserLayout } from "../layout/UserLayout";
 import { AdminLayout } from "../layout/AdminLayout";
-import { SellerDashboard } from "../pages/seller/SellerDashboard";
+import { SellerDashboard } from "../pages/seller/SellerDashBoard";
 import { DashBoard } from "../pages/admin/DashBoard";
 import { ProductListing } from "../pages/user/ProductListing";
 
