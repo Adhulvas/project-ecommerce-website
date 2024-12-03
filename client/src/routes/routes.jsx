@@ -4,7 +4,6 @@ import { About } from "../pages/user/About";
 import { Contact } from "../pages/user/Contact";
 import { Wishlist } from "../pages/user/Wishlist";
 import { ProductDetail } from "../pages/user/ProductDetail";
-import { ProductListing } from "../pages/user/productListing";
 import { Signup } from "../pages/shared/Signup";
 import { Login } from "../pages/shared/Login";
 import { UserLayout } from "../layout/userLayout";
@@ -17,6 +16,7 @@ import { ListCategories } from "../pages/admin/ListCategories";
 import { AdminLayout } from "../layout/adminLayout";
 import { SellerDashboard } from "../pages/seller/SellerDashboard";
 import { DashBoard } from "../pages/admin/DashBoard";
+import { ProductListing } from "../pages/user/productListing";
 
 export const router = createBrowserRouter([
   {
