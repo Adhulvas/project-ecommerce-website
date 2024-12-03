@@ -8,7 +8,6 @@ export const getProductsByCategory = async (req, res) => {
   try {
     const { categoryName, subcategoryName } = req.params;
 
-    // Find the category by name
     const category = await Category.findOne({
       name: categoryName,
       'subcategories.name': subcategoryName,
@@ -18,7 +17,6 @@ export const getProductsByCategory = async (req, res) => {
       return res.status(404).json({ message: 'Category or Subcategory not found' });
     }
 
-    // Fetch products matching the category and subcategory
     const products = await Product.find({
       category: categoryName,
       subcategory: subcategoryName,
@@ -48,9 +46,7 @@ export const getProductDetails = async(req,res)=>{
       return res.status(404).json({ message:'product not found'})
     }
 
-    const totalRatings = productData.reviews ? productData.reviews.length : 0;
-
-    res.json({message:'product details fetched', data:productData, totalRatings})
+    res.json({message:'product details fetched', data: productData})
     
   } catch (error) {
     res.status(500).json({ message: error.message || 'Internal server error' })
@@ -66,10 +62,14 @@ export const addNewProduct = async (req,res)=> {
       return res.status(403).json({ message: 'Only sellers can add products' });
     }
 
-    const { name, description, price, category, subcategory, sizeRequired } = req.body;
+    const { name, description, price, category, subcategory, sizeRequired, availableSizes } = req.body;
 
     if (!name || !description || !price || !category || !subcategory) {
       return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    if (sizeRequired && (!availableSizes || !availableSizes.length)) {
+      return res.status(400).json({ message: 'Available sizes are required when size is required' });
     }
 
     const categoryData = await Category.findOne({ name: category });
@@ -82,9 +82,13 @@ export const addNewProduct = async (req,res)=> {
       return res.status(404).json({ message: 'Subcategory not found' });
     }
 
-    const imageUrl = (await cloudinaryInstance.uploader.upload(req.file.path)).url;
+    const imageUrls = await Promise.all(req.files.map(async (file) => {
+      const result = await cloudinaryInstance.uploader.upload(file.path);
+      console.log(req.files);
+      return result.url;
+    }));
 
-    const existingProduct = await Product.findOne({ name, description, category, price, image:imageUrl });
+    const existingProduct = await Product.findOne({ name, description, category, price,image:imageUrls });
     if (existingProduct) {
       return res.status(409).json({ message: 'Product already exists' });
     }
@@ -95,7 +99,8 @@ export const addNewProduct = async (req,res)=> {
       price,
       category,
       subcategory,
-      image: imageUrl,
+      availableSizes: sizeRequired ? availableSizes : [],
+      images: imageUrls,
       seller: userId,
       sizeRequired,
     });

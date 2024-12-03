@@ -1,30 +1,43 @@
-import logo from '../../assets/wolf.jpg'
-import wishlist from '../../assets/wishlist-svgrepo-com.svg'
-import cart from '../../assets/cart.svg'
-import profile from '../../assets/profile.svg'
-import search from '../../assets/search.svg'
-import { Darkmode } from '../shared/Darkmode'
-import { useFetchData } from '../../hooks/useFetch'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import React, { useState } from "react";
+import logo from '../../assets/wolf.jpg';
+import wishlist from '../../assets/wishlist-svgrepo-com.svg';
+import cart from '../../assets/cart.svg';
+import profile from '../../assets/profile.svg';
+import search from '../../assets/search.svg';
+import { Darkmode } from '../shared/Darkmode';
+import { Link, useNavigate } from 'react-router-dom';
+import { axiosInstance } from "../../config/axiosInstance";
+import toast from "react-hot-toast";
+import { useFetchData } from "../../hooks/useFetch";
 
 export const Header = () => {
   const [categories, loading, error] = useFetchData("/category/get-categories");
   const [activeCategory, setActiveCategory] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleMouseEnter = (categoryId) => setActiveCategory(categoryId);
   const handleMouseLeave = () => setActiveCategory(null);
 
-  const handleSubcategoryClick = (categoryName, subcategoryName) => {
-    navigate(`/categories/${encodeURIComponent(categoryName)}/${encodeURIComponent(subcategoryName)}`);
-  };
-  
+  const handleDropdownToggle = () => setDropdownOpen(!dropdownOpen);
+  const handleDropdownClose = () => setDropdownOpen(false);
+
+
+  const logoutUser = async () => {
+  try {
+    const response = await axiosInstance.put('/user/logout')
+    toast.success(response.data.message || "Logout successful");
+    navigate("/")
+  } catch (error) {
+    console.error('Logout failed:', error);
+    toast.error(error.response?.data?.message || "Failed to logout");
+  }
+};
+
 
   return (
     <div className="fixed top-0 left-0 w-full flex items-center bg-gray-900 px-8 py-4 z-50">
-      <div className="flex-shrink-0 mr-8">
+      <div className="flex-shrink-0 mr-8 cursor-pointer" onClick={()=>navigate('/')}>
         <img src={logo} alt="logo" className="w-12 h-12 rounded-full object-cover" />
       </div>
       <ul className="flex space-x-12 text-white font-medium">
@@ -46,15 +59,15 @@ export const Header = () => {
                 className={`dropdown-content menu bg-gray-800 rounded-box z-[1] w-52 p-2 shadow ${
                   activeCategory === category._id ? "block" : "hidden"
                 }`}
-                >
+              >
                 {category.subcategories.map((subCategory) => (
                   <li key={subCategory._id}>
-                    <a
+                    <Link
+                      to={`/categories/${category.name}/${subCategory.name}`}
                       className="text-white cursor-pointer"
-                      onClick={() => handleSubcategoryClick(category.name,subCategory.name)}
                     >
                       {subCategory.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -72,13 +85,41 @@ export const Header = () => {
           <img src={search} alt="" className="w-5 h-5 ml-2 cursor-pointer invert" />
         </div>
         <Darkmode />
-        <img src={wishlist} alt="wishlist" className="w-6 cursor-pointer invert" />
-        <img src={cart} alt="cart" className="w-6 cursor-pointer invert" />
-        <img src={profile} alt="profile" className="w-5 cursor-pointer invert" />
+        <Link to='/user/wishlist'>
+          <img src={wishlist} alt="wishlist" className="w-6 cursor-pointer invert" />
+        </Link>
+        <Link to='/user/cart'>
+          <img src={cart} alt="cart" className="w-6 cursor-pointer invert" />
+        </Link>
+        <div className="relative flex items-center">
+          <button onClick={handleDropdownToggle} className="focus:outline-none">
+            <img src={profile} alt="profile" className="w-5 cursor-pointer invert" />
+          </button>
+          {dropdownOpen && (
+            <ul
+              className="absolute right-0 bg-gray-800 text-white rounded-md shadow-lg w-48 mt-32"
+              onMouseLeave={handleDropdownClose}
+            >
+              <li>
+                <Link to="/user/profile" className="block px-4 py-2 hover:bg-gray-700" onClick={handleDropdownClose}>
+                  My Account
+                </Link>
+              </li>
+              <li>
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-700"
+                  onClick={() => {
+                    logoutUser();
+                    handleDropdownClose();
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
 };
-
-
-

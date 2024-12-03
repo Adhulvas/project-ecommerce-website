@@ -14,7 +14,7 @@ export const getCategories = async (req, res) => {
 export const addCategory = async (req, res) => {
   try {
     if (req.admin.role !== 'admin') {
-      return res.status(403).json({ message: 'Only admins can add categories' });
+      return res.status(403).json({ message: 'Only admins and sellers can add categories' });
     }
 
     const { name } = req.body;

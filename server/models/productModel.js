@@ -44,6 +44,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    availableSizes: {
+      type: [String], 
+      default: [], 
+    },
     category:{
       type: String,
       required: true
@@ -62,8 +66,8 @@ const productSchema = new mongoose.Schema(
       ref: 'Seller',
       required: true
     },
-    image:{
-      type: String,
+    images:{
+      type: [String],
       default: "https://newhorizonindia.edu/nhengineering/innovation/wp-content/uploads/2020/01/default-placeholder.png"
     }
   },

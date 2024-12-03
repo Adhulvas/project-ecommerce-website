@@ -32,11 +32,11 @@ export const UserLayout = () => {
     checkUser()
   },[location.pathname])
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       {isUserAuth ? <Header/> : <LogoutHeader/>}
-      <div  className='min-h-96'>
+      <main className="flex-grow">
         <Outlet/>
-      </div>
+      </main>
       <Footer/>
     </div>
   )

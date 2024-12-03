@@ -17,17 +17,17 @@ export const Login = ({ role = 'user'}) => {
     signup_route: '/signup'
   }
 
-  if (role === 'mentor') {
-    user.role = 'mentor';
-    user.login_api = '/mentor/login';
-    user.profile_route = '/mentor/profile';
-    user.signup_route = '/mentor/signup';
+  if (role === 'admin') {
+    user.role = 'admin';
+    user.login_api = '/admin/login';
+    user.profile_route = '/admin/dashboard';
+    user.signup_route = '/admin/signup';
   }   
 
   if (role === 'seller') {
     user.role = 'seller';
     user.login_api = '/seller/login';
-    user.profile_route = '/seller/profile'; 
+    user.profile_route = '/seller/dashboard'; 
     user.signup_route = '/seller/signup'; 
   }
 

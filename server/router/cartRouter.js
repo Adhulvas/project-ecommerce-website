@@ -6,7 +6,7 @@ const router = e.Router();
 
 router.get('/get-cartItems',userAuth,getCart);
 router.post('/add-to-cart',userAuth,addToCart);
-router.delete('/remove-product',userAuth,removeCartProduct);
+router.delete('/remove-product/:productId',userAuth,removeCartProduct);
 
 
 export { router as cartRouter };

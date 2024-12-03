@@ -10,7 +10,7 @@ export const useFetchData = (endpoint) => {
     const fetchData = async () => {
       try {
         const response = await axiosInstance({ url: endpoint });
-        setData(response.data.data);
+        setData(response?.data?.data || {});
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(error);

@@ -2,31 +2,32 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const Card = ({ product }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleViewDetails = () => {
     navigate(`/productDetails/${product._id}`);
   };
+
+  const image = product.images.length > 0 ? product.images[0] : "https://via.placeholder.com/150";
+
   return (
-    <div className="card bg-base-100 w-96 shadow-xl cursor-pointer" onClick={handleViewDetails}>
-      <figure>
+    <div
+      className="card bg-base-100 w-full max-w-[380px] shadow-lg cursor-pointer mx-auto"
+      onClick={handleViewDetails}>
+      <figure className="p-4">
         <img
-          src={product.image || "https://via.placeholder.com/150"}
-          alt={product.name || "Product Image"}
-        />
+          src={image}
+          alt={product.name}
+          className="rounded-lg object-cover h-[300px] w-full"/>
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">
-          {product.name}
-          {/* {product.isNew && <div className="badge badge-secondary">NEW</div>} */}
-        </h2>
-        <p>{product.description || "No description available."}</p>
-        <div className="card-actions justify-end">
-          <div className="badge badge-outline">{product.category}</div>
-          <div className="badge badge-outline">{product.subcategory}</div>
+      <div className="card-body p-4">
+        <h2 className="card-title text-base font-semibold text-gray-500">{product.name}</h2>
+        <p className="text-sm text-gray-400">{product.description}</p>
+        <div className="card-actions mt-3 flex justify-between">
+          <div className="badge badge-outline text-sm">{product.category}</div>
+          <div className="badge badge-outline text-sm">{product.subcategory}</div>
         </div>
       </div>
     </div>
   );
 };
-

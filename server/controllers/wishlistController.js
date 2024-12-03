@@ -24,7 +24,6 @@ export const addToWishlist = async(req,res)=>{
   try {
     const userId = req.user.id
     const {productId,size} = req.body
-    console.log(size,'===========size')
 
     const product = await Product.findById(productId)
     
