@@ -19,13 +19,11 @@ app.use(cors({
 }))
 app.use(cookieParser())
 
-
-app.listen(port, () => {
-  console.log(`server is running at port ${port}`)
-})
-
 app.use('/api', apiRouter)
 
-app.all("*",(req,res)=>{
-  res.status(404).json({message:'endpoint does not exist'})
+// app.all("*",(req,res)=>{
+//   res.status(404).json({message:'endpoint does not exist'})
+// })
+app.listen(port, () => {
+  console.log(`server is running at port ${port}`)
 })
