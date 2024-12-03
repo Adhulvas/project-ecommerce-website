@@ -1,6 +1,6 @@
 import e from "express";
 import { checkSeller, deleteSellerAccount, sellerLogin, sellerLogout, sellerProfile, sellerSignup, updateSellerProfile } from "../controllers/sellerController.js";
-import { sellerOrAdminAuth } from "../middlewares/sellerorAdminAuth.js";
+import { sellerOrAdminAuth } from "../middlewares/sellerOrAdminAuth.js";
 
 const router = e.Router()
 

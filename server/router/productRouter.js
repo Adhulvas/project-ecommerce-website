@@ -1,7 +1,7 @@
 import e from "express";
 import { addNewProduct, deleteProduct, getProductDetails, getProductsByCategory, updateProduct } from "../controllers/productController.js";
 import { upload } from "../middlewares/multer.js";
-import { sellerOrAdminAuth } from "../middlewares/sellerorAdminAuth.js";
+import { sellerOrAdminAuth } from "../middlewares/sellerOrAdminAuth.js";
 
 const router = e.Router()
 
