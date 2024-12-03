@@ -19,8 +19,8 @@ app.use(cookieParser())
 
 connectDB()
 
-app.get("/", (req, res, next) => {
-  res.json( "hello world" );
+app.get("/", (req, res) => {
+  res.send( "Hello world" );
 });
 
 app.use('/api', apiRouter)
