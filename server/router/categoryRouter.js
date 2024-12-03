@@ -1,7 +1,7 @@
 import e from "express";
 import { adminAuth } from "../middlewares/adminAuth.js";
 import { addCategory, addSubcategory, deleteCategory, deleteSubcategory, getCategories, updateCategory, updateSubcategory } from "../controllers/categoryController.js";
-import { sellerOrAdminAuth } from "../middlewares/sellerorAdminAuth.js";
+import { sellerOrAdminAuth } from "../middlewares/sellerOrAdminAuth.js";
 
 const router = e.Router();
 
