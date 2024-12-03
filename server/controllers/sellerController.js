@@ -93,7 +93,7 @@ export const sellerProfile = async(req,res,next)=>{
 
 export const sellerLogout = async(req,res,next)=>{
   try {
-    res.clearCookie('token',token, {
+    res.clearCookie('token', {
       sameSite: "None",
       secure: true,
       httpOnly: true,
@@ -144,7 +144,7 @@ export const deleteSellerAccount = async (req, res) => {
       return res.status(404).json({ message: 'Seller not found' });
     }
 
-    res.clearCookie('token',token, {
+    res.clearCookie('token', {
       sameSite: "None",
       secure: true,
       httpOnly: true,

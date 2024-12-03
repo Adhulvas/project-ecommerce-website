@@ -94,7 +94,7 @@ export const userProfile = async(req,res)=>{
 
 export const userLogout = async(req,res,next)=>{
   try {
-    res.clearCookie('token',token, {
+    res.clearCookie('token', {
       sameSite: "None",
       secure: true,
       httpOnly: true,
@@ -144,7 +144,7 @@ export const deleteUserAccount = async (req,res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.clearCookie('token',token, {
+    res.clearCookie('token', {
       sameSite: "None",
       secure: true,
       httpOnly: true,

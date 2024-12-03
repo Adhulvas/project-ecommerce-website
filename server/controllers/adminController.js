@@ -93,7 +93,7 @@ export const adminProfile = async(req,res,next)=>{
 
 export const adminLogout = async(req,res,next)=>{
   try {
-    res.clearCookie('token',token, {
+    res.clearCookie('token', {
       sameSite: "None",
       secure: true,
       httpOnly: true,
@@ -144,7 +144,7 @@ export const deleteAdminAccount = async (req, res) => {
       return res.status(404).json({ message: 'Admin not found' });
     }
 
-    res.clearCookie('token',token, {
+    res.clearCookie('token', {
       sameSite: "None",
       secure: true,
       httpOnly: true,
