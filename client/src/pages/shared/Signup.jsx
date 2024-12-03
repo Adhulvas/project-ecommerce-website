@@ -37,7 +37,7 @@ export const Signup = ({ role = "user" }) => {
         data,
       });
 
-      toast.success("Signup successful! Please log in.");
+      toast.success("Signup successful");
       navigate(user.homepage_route)
     } catch (error) {
       toast.error("Signup failed. Please try again.");
