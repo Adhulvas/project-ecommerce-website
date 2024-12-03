@@ -6,7 +6,6 @@ import { Wishlist } from "../pages/user/Wishlist";
 import { ProductDetail } from "../pages/user/ProductDetail";
 import { Signup } from "../pages/shared/Signup";
 import { Login } from "../pages/shared/Login";
-import { UserLayout } from "../layout/userLayout";
 import { ErrorPage } from "../pages/shared/ErrorPage";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { Cart } from "../pages/user/Cart";
@@ -17,6 +16,7 @@ import { AdminLayout } from "../layout/adminLayout";
 import { SellerDashboard } from "../pages/seller/SellerDashboard";
 import { DashBoard } from "../pages/admin/DashBoard";
 import { ProductListing } from "../pages/user/productListing";
+import { UserLayout } from "../layout/userLayout";
 
 export const router = createBrowserRouter([
   {
