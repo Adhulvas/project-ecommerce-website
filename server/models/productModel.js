@@ -56,9 +56,21 @@ const productSchema = new mongoose.Schema(
       type: String, 
       required: true
     },
+    isTrending:{
+      type:Boolean,
+      default:false
+    },
+    isFeatured:{
+      type:Boolean,
+      default:false
+    },
     ratings:{
       type: String,
       default: 0
+    },
+    discount:{
+      type:String,
+      default:0
     },
     reviews: [reviewSchema],
     seller:{

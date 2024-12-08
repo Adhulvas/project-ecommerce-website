@@ -6,7 +6,10 @@ export const getCart = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const cart = await Cart.findOne({ userId }).populate('items.productId');
+    const cart = await Cart.findOne({ userId }).populate({
+      path: 'items.productId',
+      select:'description images price offer'
+    });
 
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
@@ -32,15 +35,19 @@ export const getCart = async (req, res) => {
         }
 
         const price = parsePrice(product.price);
-        const subtotal = price * item.quantity;
+        const discount = product.offer ? parseFloat(product.offer.replace(/%/g, '').trim()) : 0;
+        const discountAmount = Math.abs(discount) > 0 ? (Math.abs(discount) / 100) * price : 0;
+        const discountedPrice = price - discountAmount; 
+        const subtotal = discountedPrice * item.quantity;
 
         return {
           productId: product._id,
           productDescription: product.description,
           image: product.images[0], 
-          price: formatPrice(price),
+          price: formatPrice(discountedPrice),
           size: item.size,
           quantity: item.quantity,
+          discountAmount: formatPrice(discountAmount),
           subtotal: formatPrice(subtotal),
         };
       })
@@ -63,6 +70,8 @@ export const getCart = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
+
+
 
 export const addToCart = async (req, res) => {
   try {
@@ -88,15 +97,17 @@ export const addToCart = async (req, res) => {
     }
 
     const parsePrice = (priceString) => {
-      if (!priceString) return 0; 
+      if (!priceString) return 0;
       return parseFloat(priceString.toString().replace(/,/g, '').trim()) || 0;
     };
 
-
     let cart = await Cart.findOne({ userId }).populate("items.productId", "price");
+
     if (!cart) {
       cart = new Cart({ userId, items: [] });
     }
+
+    cart.items = cart.items.filter((item) => item.productId);
 
     const existingItem = cart.items.find(
       (item) =>
@@ -114,7 +125,6 @@ export const addToCart = async (req, res) => {
       const price = parsePrice(item.productId.price);
       return total + price * item.quantity;
     }, 0);
-
 
     await cart.save();
 

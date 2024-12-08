@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { clearUserData, saveUserData } from '../redux/features/userSlice'
 
 export const UserLayout = () => {
-
   const {isUserAuth,userData}=useSelector((state)=>state.user)
   const dispatch = useDispatch()
   const location = useLocation()
@@ -38,6 +37,6 @@ export const UserLayout = () => {
         <Outlet/>
       </main>
       <Footer/>
-    </div>
+  </div>
   )
 }

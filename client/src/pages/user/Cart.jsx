@@ -61,27 +61,27 @@ export const Cart = () => {
   }
 
   return (
-    <div className="container mx-auto p-8 mt-28 flex gap-8 text-gray-800">
+    <div className="container mx-auto p-4 sm:p-8 mt-28 flex flex-col lg:flex-row gap-8 text-gray-800">
       {/* Cart Items Section */}
       <div
-        className="flex-1 overflow-y-auto h-[90vh] pr-4 space-y-4"
+        className="flex-1 overflow-y-auto max-h-[90vh] space-y-4 pr-0 lg:pr-4"
         style={{ scrollbarGutter: "stable" }}
       >
-        <h1 className="text-2xl font-bold mb-4 uppercase tracking-wide text-white">
+        <h1 className="text-xl sm:text-2xl font-bold mb-4 uppercase tracking-wide text-base-content">
           My Shopping Cart
         </h1>
         {cart.items.map((item) => (
           <div
             key={item.productId}
-            className="flex items-center border border-gray-300 rounded-lg p-4 bg-white shadow-sm"
+            className="flex flex-col sm:flex-row items-center border border-gray-300 p-4 bg-white shadow-sm"
           >
             <img
               src={item.image || "https://via.placeholder.com/100"}
-              onClick={()=>navigate(`/productDetails/${item.productId}`)}
+              onClick={() => navigate(`/productDetails/${item.productId}`)}
               alt={item.productName}
-              className="w-48 h-48 object-cover rounded-lg cursor-pointer"
+              className="w-full sm:w-32 md:w-48 h-48 object-cover rounded-lg cursor-pointer"
             />
-            <div className="flex-grow px-4">
+            <div className="flex-grow px-4 mt-4 sm:mt-0 text-center sm:text-left">
               <h2 className="text-lg font-semibold">{item.productDescription}</h2>
               <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
               <p className="text-sm text-gray-500">Size: {item.size || "NA"}</p>
@@ -90,38 +90,39 @@ export const Cart = () => {
                 Subtotal: ₹{item.subtotal}
               </p>
             </div>
-  
-            <button onClick={() => handleDeleteItem(item.productId)}>
-              <img src={remove} alt="" className="w-8 h-8 ml-2 cursor-pointer"/>
+            <button onClick={() => handleDeleteItem(item.productId)} className="mt-4 sm:mt-0 sm:ml-2">
+              <img src={remove} alt="Remove" className="w-8 h-8 mx-auto sm:mx-0 cursor-pointer" />
             </button>
           </div>
         ))}
       </div>
-  
+
       {/* Summary Section */}
-      <div className="w-96 border border-gray-300 rounded-lg p-6 bg-gray-50 shadow-lg flex flex-col justify-between h-full">
-        <div>
-          <h2 className="text-lg font-semibold uppercase text-gray-700 mb-6">
-            Summary
-          </h2>
-          <div className="flex justify-between mb-4">
-            <p className="text-gray-600">Subtotal</p>
-            <p className="font-semibold">₹{cart.totalPrice}</p>
+      <div className="w-full lg:w-1/4 flex flex-col justify-start">
+        <div className="border border-gray-300 p-6 bg-gray-50 shadow-lg flex flex-col">
+          <div>
+            <h2 className="text-lg font-semibold uppercase text-gray-700 mb-6 text-center lg:text-left">
+              Summary
+            </h2>
+            <div className="flex justify-between mb-4">
+              <p className="text-gray-600">Subtotal</p>
+              <p className="font-semibold">₹{cart.totalPrice}</p>
+            </div>
+            <div className="flex justify-between mb-4">
+              <p className="text-gray-600">Shipping Cost</p>
+              <p className="font-semibold">₹0</p>
+            </div>
+            <hr className="border-gray-300 mb-4" />
+            <div className="flex justify-between text-lg font-bold text-gray-800">
+              <p>Grand Total</p>
+              <p>₹{cart.totalPrice}</p>
+            </div>
           </div>
-          <div className="flex justify-between mb-4">
-            <p className="text-gray-600">Shipping Cost</p>
-            <p className="font-semibold">₹0</p>
+          <div>
+            <button className="w-full mt-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800">
+              Checkout
+            </button>
           </div>
-          <hr className="border-gray-300 mb-4" />
-          <div className="flex justify-between text-lg font-bold text-gray-800">
-            <p>Grand Total</p>
-            <p>₹{cart.totalPrice}</p>
-          </div>
-        </div>
-        <div>
-          <button className="w-full mt-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800">
-            Checkout
-          </button>
         </div>
       </div>
     </div>

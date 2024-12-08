@@ -1,23 +1,28 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/user/Home";
 import { About } from "../pages/user/About";
-import { Contact } from "../pages/user/Contact";
 import { Wishlist } from "../pages/user/Wishlist";
-import { ProductDetail } from "../pages/user/ProductDetail";
 import { Signup } from "../pages/shared/Signup";
 import { Login } from "../pages/shared/Login";
 import { ErrorPage } from "../pages/shared/ErrorPage";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { Cart } from "../pages/user/Cart";
-import { ProfilePage } from "../pages/user/ProfilePage";
+import { ProfilePage } from "../pages/user/MyAccount/ProfilePage";
 import { SellerLayout } from "../layout/SellerLayout";
-import { ListCategories } from "../pages/admin/ListCategories";
 import { UserLayout } from "../layout/UserLayout";
+import { ListCategories } from "../pages/admin/ListCategories";
 import { AdminLayout } from "../layout/AdminLayout";
 import { SellerDashboard } from "../pages/seller/SellerDashBoard";
 import { DashBoard } from "../pages/admin/DashBoard";
+import { Address } from "../pages/user/MyAccount/Address";
+import { AccountSettings } from "../pages/user/MyAccount/AccountSettings";
+import { AccountOverview } from "../pages/user/MyAccount/AccountOverview";
+import { Orders } from "../pages/user/MyAccount/Orders";
+import { ProductDetail } from "../pages/user/ProductDetail";
+import { CreateCategory } from "../pages/admin/CreateCategory";
+import { AddProduct } from "../pages/seller/AddProduct";
+import { UpdateProduct } from "../pages/seller/UpdateProduct";
 import { ProductListing } from "../pages/user/ProductListing";
-
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -41,10 +46,6 @@ export const router = createBrowserRouter([
         element: <About/>,
       },
       {
-        path: "contact",
-        element: <Contact/>,
-      },
-      {
         path: "categories/:categoryName/:subcategoryName",
         element: <ProductListing/>,
       },
@@ -58,7 +59,25 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "profile",
-            element: <ProfilePage/>
+            element: <ProfilePage/>,
+            children: [
+              {
+                path: "overview",
+                element : <AccountOverview/>
+              },
+              {
+                path: "orders",
+                element : <Orders/>
+              },
+              {
+                path: "address",
+                element : <Address/>
+              },
+              {
+                path: "settings",
+                element : <AccountSettings/>
+              }
+            ]
           },
           {
             path: "cart",
@@ -89,6 +108,18 @@ export const router = createBrowserRouter([
         path: "login",
         element: <Login role="seller"/>,
       },
+      {
+        path: "login",
+        element: <Login role="seller"/>,
+      },
+      {
+        path: "products/create",
+        element: <AddProduct/>,
+      },
+      {
+        path: "products/edit",
+        element: <UpdateProduct/>,
+      },
     ]
   },
   {
@@ -111,6 +142,10 @@ export const router = createBrowserRouter([
       {
         path: "category/list",
         element: <ListCategories/>,
+      },
+      {
+        path: "category/create",
+        element: <CreateCategory/>,
       }
     ]
   },

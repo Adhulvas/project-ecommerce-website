@@ -21,12 +21,11 @@ export const Card = ({ product }) => {
           className="rounded-lg object-cover h-[300px] w-full"/>
       </figure>
       <div className="card-body p-4">
-        <h2 className="card-title text-base font-semibold text-gray-500">{product.name}</h2>
-        <p className="text-sm text-gray-400">{product.description}</p>
-        <div className="card-actions mt-3 flex justify-between">
-          <div className="badge badge-outline text-sm">{product.category}</div>
-          <div className="badge badge-outline text-sm">{product.subcategory}</div>
+        <div className="flex justify-between items-center">
+          <h2 className="card-title text-base font-semibold text-gray-500">{product.name}</h2>
+          <span className="text-base font-semibold text-gray-500">₹{product.price}</span>
         </div>
+        <p className="text-sm text-gray-400">{product.description}</p>
       </div>
     </div>
   );

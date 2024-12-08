@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 
 export const SideBar = ({ isOpen }) => {
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false);
+
 
   const toggleCategoryDropdown = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
+  };
+
+  const toggleProductDropdown = () => {
+    setIsProductDropdownOpen(!isProductDropdownOpen);
   };
 
   return (
@@ -24,7 +30,7 @@ export const SideBar = ({ isOpen }) => {
               <i className="fas fa-chart-line mr-3"></i> Dashboard
             </Link>
           </li>
-          {/* <li className="relative">
+          <li className="relative">
             <button
               onClick={toggleCategoryDropdown}
               className="flex items-center py-2 px-4 w-full text-left hover:bg-gray-800"
@@ -39,30 +45,47 @@ export const SideBar = ({ isOpen }) => {
                     List
                   </Link>
                 </li>
+              </ul>
+            )}
+          </li>
+          <li className="relative">
+            <button
+              onClick={toggleProductDropdown}
+              className="flex items-center py-2 px-4 w-full text-left hover:bg-gray-800"
+            >
+              <i className="fas fa-box mr-3"></i> Products
+              <i className={`fas fa-chevron-down ml-auto ${isProductDropdownOpen ? 'transform rotate-180' : ''}`}></i>
+            </button>
+            {isProductDropdownOpen && (
+              <ul className="bg-gray-800 ml-6 mt-2 rounded-lg shadow-lg">
                 <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to="/category/edit" className="flex items-center">
+                  <Link to="/seller/products/list" className="flex items-center">
+                    List
+                  </Link>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-700">
+                  <Link to="/seller/products/create" className="flex items-center">
+                    Details
+                  </Link>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-700">
+                  <Link to="/seller/products/edit" className="flex items-center">
                     Edit
                   </Link>
                 </li>
                 <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to="/category/create" className="flex items-center">
+                  <Link to="/seller/products/create" className="flex items-center">
                     Create
                   </Link>
                 </li>
               </ul>
             )}
-          </li> */}
-          <li className="py-2 px-4 hover:bg-gray-800">
-            <Link to="/products" className="flex items-center">
-              <i className="fas fa-box mr-3"></i> Products
-            </Link>
           </li>
           <li className="py-2 px-4 hover:bg-gray-800">
             <Link to="/orders" className="flex items-center">
               <i className="fas fa-shopping-cart mr-3"></i> Orders
             </Link>
           </li>
-          {/* Add other links */}
         </ul>
       </nav>
     </div>

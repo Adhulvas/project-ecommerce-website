@@ -62,10 +62,12 @@ export const Wishlist = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="max-w-5xl p-8 mt-28 mb-12 mx-auto bg-gray-200 rounded-md shadow-md">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-bold">MY WISHLIST</h1>
-        <span className="text-gray-700">{wishlistItems.length} items</span>
+    <div className="max-w-5xl p-4 sm:p-8 mt-28 mb-12 mx-auto bg-gray-200 rounded-md shadow-md">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+      <h1 className="text-xl font-bold text-center sm:text-left">MY WISHLIST</h1>
+      <span className="text-gray-700 text-center sm:text-right mt-2 sm:mt-0">
+        {wishlistItems.length} items
+      </span>
       </div>
 
       <hr className="border-gray-300 my-4" />
@@ -79,9 +81,9 @@ export const Wishlist = () => {
           {wishlistItems.map((item) => (
             <div
               key={item._id}
-              className="flex bg-white rounded-lg p-4 shadow-sm"
+              className="flex flex-col sm:flex-row bg-white rounded-lg p-4 shadow-sm"
             >
-              <div className="w-56 h-56 bg-gray-300 rounded-md flex items-center justify-center">
+              <div className="w-full sm:w-56 h-56 bg-gray-300 rounded-md flex items-center justify-center">
                 <img
                   src={item.productId.images?.[0] || "https://via.placeholder.com/100"}
                   alt={item.productId.name}
@@ -89,10 +91,11 @@ export const Wishlist = () => {
                 />
               </div>
 
-              <div className="ml-6 flex-1 flex flex-col justify-between">
+
+              <div className="mt-4 sm:mt-0 sm:ml-6 flex-1 flex flex-col justify-between">
                 <div>
                   <h1 className="text-gray-600 text-sm">{item.productId.name}</h1>
-                  <p className="text-gray-800 font-medium">
+                  <p className="text-gray-800 font-medium mt-2">
                     {item.productId.description || "No description available"}
                   </p>
                   <p className="text-lg font-semibold text-green-600 mt-1">
@@ -103,11 +106,12 @@ export const Wishlist = () => {
                   )}
                 </div>
 
-                <div className="flex space-x-4 mt-4">
+
+                <div className="flex flex-col sm:flex-row sm:space-x-4 mt-4">
                   <button
                     onClick={() => handleAddToCart(item)}
                     disabled={loadingItemId === item._id}
-                    className={`bg-black text-white w-2/4 px-4 py-2 rounded-md hover:bg-gray-800 ${
+                    className={`bg-black text-white w-full sm:w-1/2 px-4 py-2 rounded-md hover:bg-gray-800 ${
                       loadingItemId === item._id ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
@@ -115,7 +119,7 @@ export const Wishlist = () => {
                   </button>
                   <button
                     onClick={() => handleRemoveFromWishlist(item)}
-                    className="bg-red-500 text-white w-2/4 px-4 py-2 rounded-md hover:bg-red-600"
+                    className="bg-red-500 text-white w-full sm:w-1/2 px-4 py-2 rounded-md hover:bg-red-600 mt-2 sm:mt-0"
                   >
                     DELETE
                   </button>

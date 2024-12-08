@@ -13,7 +13,7 @@ export const Login = ({ role = 'user'}) => {
   const user = {
     role: 'user',
     login_api: '/user/login',
-    profile_route: '/user/profile',
+    profile_route: '/',
     signup_route: '/signup'
   }
 

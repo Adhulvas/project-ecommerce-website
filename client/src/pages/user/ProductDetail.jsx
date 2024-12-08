@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useFetchData } from "../../hooks/useFetch";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
+import dots from '../../assets/dots.svg'
 
 export const ProductDetail = () => {
   const { productId } = useParams();
@@ -87,7 +88,7 @@ export const ProductDetail = () => {
         <h2 className="text-lg font-bold mb-4">Product Images</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {product.images?.map((image, index) => (
-            <div key={index} className="bg-gray-200 h-72 overflow-hidden rounded-lg">
+            <div key={index} className="bg-gray-200 h-full overflow-hidden">
               <img
                 src={image}
                 alt={`Product ${index + 1}`}
@@ -119,12 +120,12 @@ export const ProductDetail = () => {
         {product.sizeRequired && (
           <div className="mb-6">
             <h3 className="text-lg font-bold mb-2">Select Size</h3>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {product.availableSizes?.map((size, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedSize(size)}
-                  className={`border px-4 py-2 rounded ${
+                  className={`border px-4 py-2 ${
                     selectedSize === size ? "bg-gray-800 text-white" : "hover:bg-gray-200"
                   }`}
                 >
@@ -183,6 +184,39 @@ export const ProductDetail = () => {
           <p className="text-gray-600">{product.subcategory}</p>
           <h4 className="text-lg font-bold">Seller:</h4>
           <p className="text-gray-600">{product.seller.name}</p>
+        </div>
+
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4">Ratings & Reviews</h3>
+          {product.reviews?.length > 0 ? (
+            <div className="space-y-4">
+              {product.reviews.map((review, index) => {
+                const rating = review.rating ? parseFloat(review.rating).toFixed(1) : "N/A"; 
+                return (
+                  <div key={index} className="p-4 border rounded shadow relative">
+                    <div className="flex items-center justify-between mb-2">
+
+                      <div className="flex items-center">
+                        <span className="font-bold">{review.name}</span>
+                        <span className="ml-2 bg-green-500 text-white px-2 py-1 rounded-full text-sm">
+                          {rating} ★
+                        </span>
+                      </div>
+
+                      <div>
+                        <button className="w-6 h-6 text-black dark:text-white"><img src={dots}/></button>
+                      </div>
+                    </div>
+
+
+                    <p className="text-gray-600">{review.comment}</p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-gray-600">No reviews available for this product.</p>
+          )}
         </div>
       </div>
     </div>

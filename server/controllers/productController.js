@@ -36,6 +36,16 @@ export const getProductsByCategory = async (req, res) => {
 }
 
 
+export const getTrendingProducts = async (req, res) => {
+  try {
+      const trendingProducts = await Product.find({ isTrending: true });
+      res.status(200).json({ message: 'Trending products fetched successfully', data: trendingProducts });
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch trending products', error });
+  }
+};
+
+
 
 export const getProductDetails = async(req,res)=>{
   try {
@@ -54,65 +64,94 @@ export const getProductDetails = async(req,res)=>{
 }
 
 
-export const addNewProduct = async (req,res)=> {
+
+export const addNewProduct = async (req, res) => {
   try {
-    const { role, id: userId } = req.user;
+      const { role, id: userId } = req.seller;
 
-    if (role !== 'seller') {
-      return res.status(403).json({ message: 'Only sellers can add products' });
-    }
+      if (role !== 'seller') {
+          return res.status(403).json({ message: 'Only sellers can add products' });
+      }
 
-    const { name, description, price, category, subcategory, sizeRequired, availableSizes } = req.body;
+      const { 
+          name, 
+          description, 
+          price, 
+          category, 
+          subcategory, 
+          sizeRequired, 
+          availableSizes,
+          discount, 
+          isTrending = false, 
+          isFeatured = false 
+      } = req.body;
 
-    if (!name || !description || !price || !category || !subcategory) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+      if (!name || !description || !price || !category || !subcategory) {
+          return res.status(400).json({ message: 'All fields are required' });
+      }
 
-    if (sizeRequired && (!availableSizes || !availableSizes.length)) {
-      return res.status(400).json({ message: 'Available sizes are required when size is required' });
-    }
+      if (sizeRequired && (!availableSizes || !availableSizes.length)) {
+          return res.status(400).json({ message: 'Available sizes are required when size is required' });
+      }
 
-    const categoryData = await Category.findOne({ name: category });
-    if (!categoryData) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
+      const categoryData = await Category.findOne({ name: category });
+      if (!categoryData) {
+          return res.status(404).json({ message: 'Category not found' });
+      }
 
-    const subcategoryExists = categoryData.subcategories.some((sub) => sub.name.toLowerCase() === subcategory.toLowerCase());
-    if (!subcategoryExists) {
-      return res.status(404).json({ message: 'Subcategory not found' });
-    }
+      const subcategoryExists = categoryData.subcategories.some(
+          (sub) => sub.name.toLowerCase() === subcategory.toLowerCase()
+      );
+      if (!subcategoryExists) {
+          return res.status(404).json({ message: 'Subcategory not found' });
+      }
 
-    const imageUrls = await Promise.all(req.files.map(async (file) => {
-      const result = await cloudinaryInstance.uploader.upload(file.path);
-      console.log(req.files);
-      return result.url;
-    }));
+      const imageUrls = await Promise.all(
+          req.files.map(async (file) => {
+              const result = await cloudinaryInstance.uploader.upload(file.path);
+              return result.url;
+          })
+      );
 
-    const existingProduct = await Product.findOne({ name, description, category, price,image:imageUrls });
-    if (existingProduct) {
-      return res.status(409).json({ message: 'Product already exists' });
-    }
+      const existingProduct = await Product.findOne({ 
+          name, 
+          description, 
+          category, 
+          price, 
+          images: imageUrls 
+      });
+      if (existingProduct) {
+          return res.status(409).json({ message: 'Product already exists' });
+      }
 
-    const newProduct = new Product({
-      name,
-      description,
-      price,
-      category,
-      subcategory,
-      availableSizes: sizeRequired ? availableSizes : [],
-      images: imageUrls,
-      seller: userId,
-      sizeRequired,
-    });
+      const sizes = Array.isArray(availableSizes)
+          ? availableSizes
+          : availableSizes.split(',').map((size) => size.trim());
 
-    await newProduct.save();
+      const newProduct = new Product({
+          name,
+          description,
+          price,
+          category,
+          subcategory,
+          availableSizes: sizeRequired ? sizes : [],
+          images: imageUrls,
+          seller: userId,
+          sizeRequired,
+          discount,
+          isTrending,
+          isFeatured
+      });
 
-    res.status(201).json({ message: 'Product added successfully', product: newProduct });
+      await newProduct.save();
+
+      res.status(201).json({ message: 'Product added successfully', product: newProduct });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to add product', error });
+      console.error(error);
+      res.status(500).json({ message: 'Failed to add product', error });
   }
-}
+};
+
 
 
 export const deleteProduct = async (req,res)=> {

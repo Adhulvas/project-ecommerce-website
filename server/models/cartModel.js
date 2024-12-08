@@ -37,13 +37,6 @@ const cartSchema = mongoose.Schema(
   }
 )
 
-// cartSchema.methods.calculateTotalPrice = function () {
-//   this.totalPrice = this.items.reduce((total, item) => {
-//     const itemPrice = item.productId && item.productId.price ? item.productId.price : 0;
-//     return total + itemPrice * item.quantity;
-//   }, 0);
-// };
-
 cartSchema.methods.calculateTotalPrice = function () {
   this.totalPrice = this.items.reduce((total, item) => {
     const priceString = item.productId?.price || "0"; // Default to "0" if price is missing
@@ -53,6 +46,33 @@ cartSchema.methods.calculateTotalPrice = function () {
     return total + price * quantity;
   }, 0);
 };
+
+
+// cartSchema.methods.calculateTotalPrice = function () {
+//   // Calculate total price
+//   this.totalPrice = this.items.reduce((total, item) => {
+//     const priceString = item.productId?.price || "0"; // Default to "0" if price is missing
+//     const price = parseFloat(priceString.toString().replace(/,/g, '').trim()) || 0;
+//     const quantity = item.quantity || 0;
+
+//     return total + price * quantity;
+//   }, 0);
+
+//   // Calculate total discount
+//   const totalDiscount = this.items.reduce((total, item) => {
+//     const offer = item.productId?.offer || "0%"; // Default to "0%" if offer is missing
+//     const discountPercent = parseFloat(offer.replace(/%/g, '').trim()); // Convert to number
+//     const price = parseFloat(item.productId?.price || "0") || 0;
+//     const quantity = item.quantity || 0;
+
+//     // Calculate discount amount
+//     const discountAmount = (discountPercent < 0 ? -discountPercent : 0) * price * quantity / 100;
+//     return total + discountAmount;
+//   }, 0);
+
+//   // Final price after discount
+//   this.finalPrice = this.totalPrice - totalDiscount;
+// };
 
 
 

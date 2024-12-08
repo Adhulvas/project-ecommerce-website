@@ -1,4 +1,5 @@
 import React from "react";
+import { Darkmode } from "../shared/Darkmode";
 
 export const SellerHeader = ({ toggleSidebar }) => {
   return (

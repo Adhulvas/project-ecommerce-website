@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 export const Darkmode = () => {
   const [isDarkMode,setIsDarkMode]=useState(false)
 
-  document.querySelector("html").setAttribute("data-theme", isDarkMode ? 'light' : 'dark')
+  document.querySelector("html").setAttribute("data-theme", isDarkMode ? 'dark' : 'light')
 
   const toggleTheme = () =>{
     setIsDarkMode(!isDarkMode)
@@ -33,3 +33,4 @@ export const Darkmode = () => {
     </label>
   )
 }
+
