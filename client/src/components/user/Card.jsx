@@ -15,10 +15,17 @@ export const Card = ({ product }) => {
       className="card bg-base-100 w-full max-w-[380px] shadow-lg cursor-pointer mx-auto"
       onClick={handleViewDetails}>
       <figure className="p-4">
-        <img
-          src={image}
-          alt={product.name}
-          className="rounded-lg object-cover h-[300px] w-full"/>
+        <div className='relative'>
+          <img
+            src={image}
+            alt={product.name}
+            className="rounded-lg object-cover h-[300px] w-full"/>
+            {product.discount && (
+              <span className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 text-sm">
+                {product.discount}
+              </span>
+            )}
+        </div>
       </figure>
       <div className="card-body p-4">
         <div className="flex justify-between items-center">

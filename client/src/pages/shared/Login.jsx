@@ -48,16 +48,14 @@ export const Login = ({ role = 'user'}) => {
     }
   }
   return (
-    // first-div
  <div className="first-div flex items-center justify-center h-screen w-[90%] max-w-4xl mx-auto">
-  {/* second-div */}
   <div className='w-11/12 max-w-5xl bg-slate-300 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-6 box-border'>
-    {/* left-section */}
+
     <div className='hidden md:flex w-full md:w-1/2 p-1'>
       <img src={logincover} alt="Login Cover" className='w-full h-full object-cover rounded-3xl' />
     </div>
 
-    {/* right-section */}
+
     <div className='w-full md:w-1/2 flex flex-col items-center justify-center px-6 py-8 bg-slate-300 rounded-lg'>
       {/* Logo */}
       <div className='w-16 h-16 bg-slate-500 rounded-full flex items-center justify-center mb-6'>

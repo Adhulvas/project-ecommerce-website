@@ -23,7 +23,6 @@ export const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
-
   const handleResize = () => {
     setIsMobile(window.innerWidth < 1024);
   };
@@ -57,17 +56,16 @@ export const Header = () => {
           {isMobile && (
             <div className="absolute left-4 flex items-center space-x-4">
               <button onClick={() => setMenuOpen((prev) => !prev)}>
-                {menuOpen ? (
-                  <img src={closeMenu} alt="Close Menu" className="w-6 h-6" />
-                ) : (
-                  <img src={hamburgerMenu} alt="Hamburger Menu" className="w-6 h-6" /> 
-                )}
+                <img
+                  src={menuOpen ? closeMenu: hamburgerMenu}
+                  alt="Menu"
+                  className="w-6 h-6"
+                />
               </button>
               <img
                 src={search}
                 alt="Search Icon"
                 className="w-6 h-6 cursor-pointer invert"
-                onClick={() => console.log("Search clicked")}
               />
             </div>
           )}

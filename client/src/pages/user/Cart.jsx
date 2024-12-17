@@ -1,46 +1,28 @@
-import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../../config/axiosInstance";
 import remove from '../../assets/delete.svg';
 import { useNavigate } from "react-router-dom";
+import { useFetchCart } from "../../hooks/useFetchCart";
 
 
 export const Cart = () => {
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [cart, loading, error, refetchCart] = useFetchCart("/cart/get-cartItems");
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const response = await axiosInstance.get("/cart/get-cartItems");
-        setCart(response.data);
-      } catch (err) {
-        console.error("Error fetching cart:", err);
-        setError(err.response?.data?.message || "Failed to fetch cart");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCart();
-  }, []);
 
   const handleDeleteItem = async (productId) => {
     try {
       const response = await axiosInstance.delete(`/cart/remove-product/${productId}`);
-      toast.success(response.data.message || "Item removed successfully");
+      toast.success(response.data?.message || "Item removed successfully");
 
-      const updatedCartResponse = await axiosInstance.get("/cart/get-cartItems");
-      setCart(updatedCartResponse.data);
+      await refetchCart();
     } catch (err) {
       console.error("Error removing item:", err);
       toast.error(err.response?.data?.message || "Failed to remove item");
     }
   };
   
-
+  
   if (loading) {
     return <div className="text-center mt-28 text-lg">Loading cart...</div>;
   }
@@ -60,6 +42,7 @@ export const Cart = () => {
     );
   }
 
+
   return (
     <div className="container mx-auto p-4 sm:p-8 mt-28 flex flex-col lg:flex-row gap-8 text-gray-800">
       {/* Cart Items Section */}
@@ -71,6 +54,7 @@ export const Cart = () => {
           My Shopping Cart
         </h1>
         {cart.items.map((item) => (
+
           <div
             key={item.productId}
             className="flex flex-col sm:flex-row items-center border border-gray-300 p-4 bg-white shadow-sm"
@@ -90,6 +74,8 @@ export const Cart = () => {
                 Subtotal: ₹{item.subtotal}
               </p>
             </div>
+
+
             <button onClick={() => handleDeleteItem(item.productId)} className="mt-4 sm:mt-0 sm:ml-2">
               <img src={remove} alt="Remove" className="w-8 h-8 mx-auto sm:mx-0 cursor-pointer" />
             </button>
@@ -119,7 +105,9 @@ export const Cart = () => {
             </div>
           </div>
           <div>
-            <button className="w-full mt-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800">
+            <button className="w-full mt-6 py-3 bg-black text-white font-semibold rounded-lg hover:bg-gray-800"
+            onClick={()=>navigate('/checkout')}
+            >
               Checkout
             </button>
           </div>

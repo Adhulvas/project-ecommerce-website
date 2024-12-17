@@ -1,9 +1,11 @@
 import React from "react";
 import toast from "react-hot-toast";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../config/axiosInstance";
 
 export const ProfilePage = () => {
+
+  const navigate=useNavigate()
   const logoutUser = async () => {
     try {
       const response = await axiosInstance.put('/user/logout');

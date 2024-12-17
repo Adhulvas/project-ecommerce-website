@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/user/Home";
-import { About } from "../pages/user/About";
 import { Wishlist } from "../pages/user/Wishlist";
 import { Signup } from "../pages/shared/Signup";
 import { Login } from "../pages/shared/Login";
@@ -23,6 +22,12 @@ import { CreateCategory } from "../pages/admin/CreateCategory";
 import { AddProduct } from "../pages/seller/AddProduct";
 import { UpdateProduct } from "../pages/seller/UpdateProduct";
 import { ProductListing } from "../pages/user/ProductListing";
+import { ProductList } from "../pages/admin/ProductList";
+import { SellerProductList } from "../pages/seller/SellerProductList";
+import { DetailedView } from "../pages/shared/DetailedView";
+import { Success } from "../components/user/Success";
+import { Cancel } from "../components/user/Cancel";
+import { CheckoutPage } from "../pages/user/CheckoutPage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -40,10 +45,6 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login/>,
-      },
-      {
-        path: "about",
-        element: <About/>,
       },
       {
         path: "categories/:categoryName/:subcategoryName",
@@ -88,7 +89,19 @@ export const router = createBrowserRouter([
             element: <Wishlist/>,
           },
         ]
-      }
+      },
+      {
+        path: "success",
+        element: <Success/>,
+      },
+      {
+        path: "cancel",
+        element: <Cancel/>,
+      },
+      {
+        path: "checkout",
+        element: <CheckoutPage/>,
+      },
     ]
   },
   {
@@ -117,9 +130,17 @@ export const router = createBrowserRouter([
         element: <AddProduct/>,
       },
       {
-        path: "products/edit",
+        path: "products/edit/:productId",
         element: <UpdateProduct/>,
       },
+      {
+        path: "products/view/:productId",
+        element: <DetailedView/>,
+      },
+      {
+        path: "products/list",
+        element: <SellerProductList/>,
+      }
     ]
   },
   {
@@ -146,7 +167,19 @@ export const router = createBrowserRouter([
       {
         path: "category/create",
         element: <CreateCategory/>,
-      }
+      },
+      {
+        path: "products/list",
+        element: <ProductList/>,
+      },
+      {
+        path: "products/view/:productId",
+        element: <DetailedView/>,
+      },
+      {
+        path: "products/edit/:productId",
+        element: <UpdateProduct/>,
+      },
     ]
   },
 ]);

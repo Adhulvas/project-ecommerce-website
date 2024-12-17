@@ -69,6 +69,8 @@ export const updateCategory = async (req, res) => {
 
 export const deleteCategory = async (req, res) => {
   try {
+    const { role } = req.admin;
+
     if (req.admin.role !== 'admin') {
       return res.status(403).json({ message: 'Only admins can delete categories' });
     }
@@ -163,22 +165,30 @@ export const updateSubcategory = async (req, res) => {
 
 export const deleteSubcategory = async (req, res) => {
   try {
-    const { role } = req.user;
+    const { role } = req.admin;
     if (role !== 'admin' && role !== 'seller') {
       return res.status(403).json({ message: 'Only admins and sellers can delete subcategories' });
     }
 
     const { categoryId, subcategoryId } = req.params;
 
+    console.log("Deleting subcategory...");
+    console.log("Category ID:", categoryId);
+    console.log("Subcategory ID:", subcategoryId);
+
     const category = await Category.findById(categoryId);
     if (!category) {
       return res.status(404).json({ message: 'Category not found' });
     }
 
+
+    console.log("Category found:", category);
     const subcategoryIndex = category.subcategories.findIndex(
       (subcat) => subcat._id.toString() === subcategoryId
     );
+
     if (subcategoryIndex === -1) {
+      console.log("Subcategory index not found");
       return res.status(404).json({ message: 'Subcategory not found' });
     }
 
@@ -190,4 +200,3 @@ export const deleteSubcategory = async (req, res) => {
     res.status(500).json({ message: error.message || 'Failed to delete subcategory' });
   }
 };
-

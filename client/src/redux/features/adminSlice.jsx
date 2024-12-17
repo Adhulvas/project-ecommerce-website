@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   isAdminAuth: false,
-  adminData: {}
+  adminData: {},
 }
 
 export const adminSlice = createSlice({
@@ -21,6 +21,9 @@ export const adminSlice = createSlice({
 })
 
 
-export const { saveAdminData,clearAdminData} = adminSlice.actions
+export const { 
+  saveAdminData,
+  clearAdminData,
+} = adminSlice.actions
 
 export default adminSlice.reducer

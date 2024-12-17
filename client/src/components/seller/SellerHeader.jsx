@@ -1,5 +1,5 @@
 import React from "react";
-import { Darkmode } from "../shared/Darkmode";
+import logo from '../../assets/wolf.jpg'
 
 export const SellerHeader = ({ toggleSidebar }) => {
   return (
@@ -28,7 +28,7 @@ export const SellerHeader = ({ toggleSidebar }) => {
         </div>
       </div>
       <div className="navbar-center">
-        <a className="btn btn-ghost text-xl">WOLF</a>
+        <img src={logo} alt="" className="w-12 h-12 rounded-full object-cover cursor-pointer" />
       </div>
       <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">

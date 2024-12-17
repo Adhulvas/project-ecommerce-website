@@ -66,11 +66,9 @@ const productSchema = new mongoose.Schema(
     },
     ratings:{
       type: String,
-      default: 0
     },
     discount:{
       type:String,
-      default:0
     },
     reviews: [reviewSchema],
     seller:{

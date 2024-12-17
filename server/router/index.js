@@ -7,6 +7,7 @@ import { cartRouter } from "./cartRouter.js"
 import { wishlistRouter } from "./wishlistRouter.js"
 import { reviewRouter } from "./reviewRouter.js"
 import { categoryRouter } from "./categoryRouter.js"
+import { paymentRouter } from "./paymentRouter.js"
 
 const router = e.Router()
 
@@ -18,5 +19,6 @@ router.use('/cart',cartRouter)
 router.use('/wishlist',wishlistRouter)
 router.use('/review',reviewRouter)
 router.use('/category',categoryRouter)
+router.use('/payment',paymentRouter)
 
 export {router as apiRouter}

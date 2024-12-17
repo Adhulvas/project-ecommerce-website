@@ -92,6 +92,107 @@ export const userProfile = async(req,res)=>{
 }
 
 
+export const addAddress = async (req, res) => {
+  try {
+    const { address } = req.body;
+    const userId = req.user.id;
+
+    if (!address) {
+      return res.status(400).json({ success: false, message: "Address is required" });
+    }
+
+    // Validate user existence
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Add the address to the user's addresses array
+    user.addresses.push(address);
+    await user.save();
+
+    res.status(200).json({ success: true, data: user.addresses });
+  } catch (error) {
+    console.error("Error adding address:", error.message);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+
+export const updateAddress = async (req, res) => {
+  const { addressId } = req.params; 
+  const userId = req.user.id;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+
+    const addressIndex = user.addresses.findIndex(
+      (address) => address._id.toString() === addressId
+    );
+
+    if (addressIndex === -1) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    const updatedAddress = {
+      ...user.addresses[addressIndex],
+      ...req.body 
+    };
+
+
+    user.addresses[addressIndex] = updatedAddress;
+
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Address updated successfully",
+      data: updatedAddress,
+    });
+  } catch (error) {
+    console.error("Error updating address:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+export const deleteAddress = async(req,res)=>{
+  const { addressId } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const updatedAddresses = user.addresses.filter(
+      (address) => address._id.toString() !== addressId
+    );
+
+    if (updatedAddresses.length === user.addresses.length) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    user.addresses = updatedAddresses;
+    await user.save();
+
+    res.status(200).json({
+      message: "Address deleted successfully",
+      data: updatedAddresses,
+    });
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 export const userLogout = async(req,res,next)=>{
   try {
     res.clearCookie('token', {

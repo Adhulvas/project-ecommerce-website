@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetchData } from "../../hooks/useFetch";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
-import dots from '../../assets/dots.svg'
+import { useSelector } from "react-redux";
 
 export const ProductDetail = () => {
+  const { isUserAuth } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const { productId } = useParams();
   const [product, loading, error] = useFetchData(`product/productDetails/${productId}`);
   const [selectedSize, setSelectedSize] = useState(null);
@@ -27,6 +29,11 @@ export const ProductDetail = () => {
   }
 
   const handleAddToCart = async () => {
+    if (!isUserAuth) {
+      navigate("/login");
+      return;
+    }
+
     setSizeError("");
 
     if (product.sizeRequired && !selectedSize) {
@@ -58,6 +65,11 @@ export const ProductDetail = () => {
   };
 
   const handleAddToWishlist = async () => {
+    if (!isUserAuth) {
+      navigate("/login");
+      return;
+    }
+
     setSizeError("");
 
     if (product.sizeRequired && !selectedSize) {
@@ -101,20 +113,20 @@ export const ProductDetail = () => {
       {/* Right Section */}
       <div className="md:w-1/3 md:pl-6">
         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-        <p className="text-gray-700 mb-2">{product.description}</p>
+        <p className="mb-2">{product.description}</p>
 
         {/* Ratings */}
         <div className="flex items-center mb-4">
-          <span className="text-lg font-bold">{product.ratings || 0}</span>
+          <span className="text-lg font-bold flex align-middle">{product.ratings || 0}★</span>
           <span className="text-gray-500 ml-2">| {product.reviews?.length || 0} Ratings</span>
         </div>
 
+
         {/* Price */}
         <div className="text-2xl font-semibold text-green-600 mb-2">
-          ₹{product.price}{" "}
-          <span className="line-through text-gray-500">₹{product.originalPrice || "N/A"}</span>
+          ₹{product.price || "N/A"}
         </div>
-        <p className="text-gray-600 mb-4">Inclusive of all taxes</p>
+        <p className="mb-4">Inclusive of all taxes</p>
 
         {/* Sizes */}
         {product.sizeRequired && (
@@ -150,40 +162,40 @@ export const ProductDetail = () => {
           />
         </div>
 
-        <div className="flex gap-4 mb-8">
+        <div className="flex flex-col mb-8">
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className={`bg-blue-400 text-white px-8 py-2 rounded hover:bg-blue-600 ${
+            className={`bg-blue-400 text-white font-bold w-full px-8 py-5 rounded hover:bg-blue-500 ${
               isAddingToCart ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {isAddingToCart ? "Adding..." : "Add to Cart"}
+            {isAddingToCart ? "Adding..." : "ADD TO CART"}
           </button>
           <button
             onClick={handleAddToWishlist}
             disabled={isAddingToWishlist}
-            className={`bg-pink-400 text-white px-8 py-2 rounded hover:bg-pink-600 ${
+            className={`bg-pink-400 text-white font-bold w-full mt-4 px-8 py-5 rounded hover:bg-pink-500 ${
               isAddingToWishlist ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {isAddingToWishlist ? "Adding..." : "Wishlist"}
+            {isAddingToWishlist ? "Adding..." : "WISHLIST"}
           </button>
         </div>
 
         {/* Product Details */}
         <div>
           <h3 className="text-lg font-bold mb-2">Product Details</h3>
-          <p className="text-gray-600">{product.details || "No additional details available."}</p>
+          <p>{product.description || "No additional details available."}</p>
         </div>
 
         <div className="mt-4">
           <h4 className="text-lg font-bold">Category:</h4>
-          <p className="text-gray-600">{product.category}</p>
+          <p>{product.category}</p>
           <h4 className="text-lg font-bold">Subcategory:</h4>
-          <p className="text-gray-600">{product.subcategory}</p>
+          <p>{product.subcategory}</p>
           <h4 className="text-lg font-bold">Seller:</h4>
-          <p className="text-gray-600">{product.seller.name}</p>
+          <p>{product.seller.name}</p>
         </div>
 
         <div className="mt-8">
@@ -202,14 +214,8 @@ export const ProductDetail = () => {
                           {rating} ★
                         </span>
                       </div>
-
-                      <div>
-                        <button className="w-6 h-6 text-black dark:text-white"><img src={dots}/></button>
-                      </div>
                     </div>
-
-
-                    <p className="text-gray-600">{review.comment}</p>
+                    <p>{review.comment}</p>
                   </div>
                 );
               })}

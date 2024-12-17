@@ -15,6 +15,7 @@ export const ProductListing = () => {
         setLoading(true);
         const response = await axiosInstance.get(`/product/categories/${categoryName}/${subcategoryName}`);
         setProducts(response.data.data);
+        console.log(response.data.data)
       } catch (err) {
         setError(err.message || "Failed to fetch products");
       } finally {

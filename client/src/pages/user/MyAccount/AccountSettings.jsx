@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFetchData } from "../../../hooks/useFetch";
 import edit from '../../../assets/edit.svg';
 
@@ -10,6 +10,14 @@ export const AccountSettings = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    console.log("User Profile Data:", userProfile);
+  }, [userProfile]);
+
+  const phoneNumber = userProfile.addresses && userProfile.addresses.length > 0 
+    ? userProfile.addresses[0].phoneNumber 
+    : "Not provided";
+
   return (
     <div className="p-4 md:p-8 mt-10">
       <div className="bg-white rounded shadow-md mb-6 p-4 md:p-6">
@@ -20,7 +28,7 @@ export const AccountSettings = () => {
           <div className="mt-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <p><strong>First Name: </strong>{userProfile.name}</p>
-              <p><strong>Phone:</strong></p>
+              <p><strong>Phone: </strong>{phoneNumber}</p>
             </div>
             <button onClick={openModal}>
               <img src={edit} alt="edit" className="text-black w-6 h-6" />

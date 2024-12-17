@@ -1,18 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toggleProductDropdown } from "../../redux/features/dropdownSlice";
 
 export const SideBar = ({ isOpen }) => {
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
-  const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false);
-
-
-  const toggleCategoryDropdown = () => {
-    setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
-  };
-
-  const toggleProductDropdown = () => {
-    setIsProductDropdownOpen(!isProductDropdownOpen);
-  };
+  const dispatch = useDispatch()
+  const isProductDropdownOpen = useSelector((state)=>state.dropdown.isProductDropdownOpen)
 
   return (
     <div
@@ -20,37 +13,17 @@ export const SideBar = ({ isOpen }) => {
         isOpen ? "translate-x-0" : "-translate-x-64"
       } transition-transform duration-300 ease-in-out`}
     >
-      <div className="flex items-center justify-center h-16 bg-gray-800 text-2xl font-bold">
-        Larkon
-      </div>
-      <nav className="flex-grow mt-4">
+      <nav className="flex-grow pt-20">
         <ul>
           <li className="py-2 px-4 hover:bg-gray-800">
             <Link to="/seller/dashboard" className="flex items-center">
               <i className="fas fa-chart-line mr-3"></i> Dashboard
             </Link>
           </li>
+
           <li className="relative">
             <button
-              onClick={toggleCategoryDropdown}
-              className="flex items-center py-2 px-4 w-full text-left hover:bg-gray-800"
-            >
-              <i className="fas fa-list mr-3"></i> Category
-              <i className={`fas fa-chevron-down ml-auto ${isCategoryDropdownOpen ? 'transform rotate-180' : ''}`}></i>
-            </button>
-            {isCategoryDropdownOpen && (
-              <ul className="bg-gray-800 ml-6 mt-2 rounded-lg shadow-lg">
-                <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to="/seller/category/list" className="flex items-center">
-                    List
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
-          <li className="relative">
-            <button
-              onClick={toggleProductDropdown}
+              onClick={()=>dispatch(toggleProductDropdown())}
               className="flex items-center py-2 px-4 w-full text-left hover:bg-gray-800"
             >
               <i className="fas fa-box mr-3"></i> Products
@@ -61,16 +34,6 @@ export const SideBar = ({ isOpen }) => {
                 <li className="py-2 px-4 hover:bg-gray-700">
                   <Link to="/seller/products/list" className="flex items-center">
                     List
-                  </Link>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to="/seller/products/create" className="flex items-center">
-                    Details
-                  </Link>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to="/seller/products/edit" className="flex items-center">
-                    Edit
                   </Link>
                 </li>
                 <li className="py-2 px-4 hover:bg-gray-700">

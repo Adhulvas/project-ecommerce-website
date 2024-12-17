@@ -21,6 +21,6 @@ export const sellerSlice = createSlice({
 })
 
 
-export const { saveSellerData,clearSellerData} = sellerSlice.actions
+export const { saveSellerData,clearSellerData } = sellerSlice.actions
 
 export default sellerSlice.reducer

@@ -46,6 +46,60 @@ export const getTrendingProducts = async (req, res) => {
 };
 
 
+export const getFeaturedProducts = async (req, res) => {
+  try {
+      const featuredProducts = await Product.find({ isFeatured: true });
+      res.status(200).json({ message: 'Trending products fetched successfully', data: featuredProducts });
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch featured products', error });
+  }
+};
+
+
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find()
+      .populate('seller', 'name')
+      .populate('subcategory', 'name');
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: 'No products found' });
+    }
+
+    res.status(200).json({ message: 'Products fetched successfully', data: products });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch products', error: error.message || 'Internal server error' });
+  }
+};
+
+
+export const getSellerProducts = async (req, res) => {
+  try {
+    const sellerId = req.seller.id;
+
+    const products = await Product.find({ seller: sellerId })
+      .populate('category', 'name') 
+      .populate('subcategory', 'name')
+      .exec();
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: 'No products found for this seller' });
+    }
+
+    res.status(200).json({
+      message: 'Seller products fetched successfully',
+      data: products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Failed to fetch seller products',
+      error: error.message || 'Internal server error',
+    });
+  }
+};
+
 
 export const getProductDetails = async(req,res)=>{
   try {
@@ -64,7 +118,6 @@ export const getProductDetails = async(req,res)=>{
 }
 
 
-
 export const addNewProduct = async (req, res) => {
   try {
       const { role, id: userId } = req.seller;
@@ -79,7 +132,7 @@ export const addNewProduct = async (req, res) => {
           price, 
           category, 
           subcategory, 
-          sizeRequired, 
+          sizeRequired = false,
           availableSizes,
           discount, 
           isTrending = false, 
@@ -90,9 +143,10 @@ export const addNewProduct = async (req, res) => {
           return res.status(400).json({ message: 'All fields are required' });
       }
 
-      if (sizeRequired && (!availableSizes || !availableSizes.length)) {
-          return res.status(400).json({ message: 'Available sizes are required when size is required' });
-      }
+
+      if (sizeRequired === true && (!availableSizes || !availableSizes.length)) {
+        return res.status(400).json({ message: 'Available sizes are required when size is required' });
+    }
 
       const categoryData = await Category.findOne({ name: category });
       if (!categoryData) {
@@ -153,7 +207,6 @@ export const addNewProduct = async (req, res) => {
 };
 
 
-
 export const deleteProduct = async (req,res)=> {
   try {
     const { role, id: userId } = req.user;
@@ -186,7 +239,7 @@ export const updateProduct = async (req,res)=> {
   try {
     const { role, id: userId } = req.user;
     const { productId } = req.params;
-    const { name, description, price, category, brand, sizeRequired } = req.body;
+    const { name, description, price, category, subcategory, sizeRequired,availableSizes } = req.body;
 
     if (role !== 'admin' && role !== 'seller') {
       return res.status(403).json({ message: 'Only admins or sellers can update products' });
@@ -206,8 +259,9 @@ export const updateProduct = async (req,res)=> {
     if (description) updateFields.description = description;
     if (price) updateFields.price = price;
     if (category) updateFields.category = category;
-    if (brand) updateFields.brand = brand;
+    if (subcategory) updateFields.subcategory = subcategory;
     if (sizeRequired !== undefined) updateFields.sizeRequired = sizeRequired;
+    if (availableSizes) updateFields.availableSizes = availableSizes;
 
     if (req.file) {
       const uploadResponse = await cloudinaryInstance.uploader.upload(req.file.path);
@@ -225,5 +279,3 @@ export const updateProduct = async (req,res)=> {
     res.status(500).json({ message: 'Failed to update product', error });
   }
 }
-
-
