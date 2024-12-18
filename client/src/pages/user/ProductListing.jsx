@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import { Card } from "../../components/user/Card";
 
@@ -8,6 +8,10 @@ export const ProductListing = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get('search'); // Get the search query from the URL
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,6 +28,7 @@ export const ProductListing = () => {
     };
     fetchProducts();
   }, [categoryName, subcategoryName]);
+
 
   if (loading) return <p>Loading products...</p>;
   if (error) return <p className="text-red-500">{error}</p>;

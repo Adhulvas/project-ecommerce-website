@@ -37,6 +37,7 @@ export const CheckoutPage = () => {
     setNewAddress((prev) => ({ ...prev, [name]: value }));
   };
 
+  
   const makePayment = async () => {
     try {
       const response = await axiosInstance.post("/payment/create-payment-session", {
@@ -53,8 +54,9 @@ export const CheckoutPage = () => {
       toast.error(error.response?.data?.error || "Payment initiation failed.");
     }
   };
+  
 
-
+  
   const isAddressValid =
     selectedAddress ||
     (showNewAddressForm &&

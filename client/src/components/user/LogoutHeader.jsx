@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/wolf.jpg";
 import profile from "../../assets/profile.svg";
 import search from "../../assets/search.svg";
@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFetchData } from "../../hooks/useFetch";
 import hamburgerMenu from "../../assets/hamburgerMenu.svg";
 import closeMenu from "../../assets/closeMenu.svg";
+import { axiosInstance } from "../../config/axiosInstance";
 
 export const LogoutHeader = () => {
   const [categories, loading, error] = useFetchData("/category/get-categories");
@@ -14,8 +15,25 @@ export const LogoutHeader = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [activeCategory, setActiveCategory] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
+  const [isSearchPanelVisible, setIsSearchPanelVisible] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false); 
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("click", handleClickOutside); 
+    return () => {
+      window.removeEventListener("click", handleClickOutside); 
+    };
+  }, []);
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < 1024);
@@ -30,6 +48,24 @@ export const LogoutHeader = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const handleSearch = async (term) => {
+    setSearchTerm(term); 
+    if (term) {
+      try {
+        const response = await axiosInstance.get(`/product/search?search=${term}`);
+        setSearchResults(response.data);
+        setIsPanelVisible(true); 
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+        setSearchResults([]);
+        setIsPanelVisible(true); 
+      }
+    } else {
+      setSearchResults([]); 
+      setIsPanelVisible(false); 
+    }
+  };
+
   const handleCategoryClick = (categoryId) => {
     setActiveCategory(activeCategory === categoryId ? null : categoryId);
   };
@@ -39,23 +75,80 @@ export const LogoutHeader = () => {
       <div className="flex items-center justify-between px-4 py-3 md:px-8">
 
         <div className={`flex items-center space-x-4 ${isMobile ? "justify-center w-full" : "space-x-4"}`}>
+
           {isMobile && (
-            <div className="absolute left-4 flex items-center space-x-4">
+            <div className="absolute left-4 flex items-center">
               <button onClick={() => setMenuOpen((prev) => !prev)}>
-                {menuOpen ? (
-                  <img src={closeMenu} alt="Close Menu" className="w-6 h-6" />
-                ) : (
-                  <img src={hamburgerMenu} alt="Hamburger Menu" className="w-6 h-6" />
-                )}
+                <img
+                  src={menuOpen ? closeMenu : hamburgerMenu}
+                  alt="Menu"
+                  className="w-6 h-6"
+                />
               </button>
-              <img
-                src={search}
-                alt="Search Icon"
-                className="w-6 h-6 cursor-pointer invert"
-                onClick={() => console.log("Search clicked")}
-              />
+              <button onClick={() => setIsSearchPanelVisible(true)}>
+                <img
+                  src={search}
+                  alt="Search Icon"
+                  className="w-6 h-6 cursor-pointer invert ml-4"
+                />
+              </button>
             </div>
           )}
+
+          {isSearchPanelVisible && (
+            <div className="fixed top-0 left-0 w-full h-full bg-white p-4 z-50 flex flex-col !ml-0">
+              <div className="flex justify-between items-center mb-4">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="flex-grow text-black bg-transparent placeholder-gray-500 outline-none"
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                />
+                <button onClick={() => {
+                  setSearchResults([]);
+                  setIsSearchPanelVisible(false);
+                }} className="text-black">
+                  ✕
+                </button>
+              </div>
+              <div className="overflow-y-auto h-full">
+                {searchTerm ? (
+                  searchResults.length > 0 ? (
+                    <ul>
+                      {searchResults.map((product) => (
+                        <li key={product._id} className="py-4 flex border-b border-gray-600">
+                          <img
+                            src={product.images[0]}
+                            alt={product.name}
+                            className="w-20 h-20 object-cover mr-4"
+                          />
+                          <div className="flex-grow">
+                            <Link
+                              to={`/productDetails/${product._id}`}
+                              className="text-black hover:underline text-lg font-semibold"
+                              onClick={() => {
+                                setIsSearchPanelVisible(false);
+                              }}
+                            >
+                              {product.name}
+                            </Link>
+                            <p className="text-black text-sm">{product.description}</p>
+                            <p className="text-black font-bold mt-1">
+                              ₹{parseFloat(product.price.replace(/,/g, '')).toFixed(2)}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-black">No results found.</p>
+                  )
+                ) : null}
+              </div>
+            </div>
+          )}
+
           <img
             src={logo}
             alt="logo"
@@ -63,7 +156,6 @@ export const LogoutHeader = () => {
             onClick={() => navigate("/")}
           />
         </div>
-
 
         {!isMobile && (
           <div className="hidden md:flex items-center flex-grow ml-8">
@@ -100,11 +192,13 @@ export const LogoutHeader = () => {
                 ))
               )}
             </nav>
-            <div className="flex items-center border border-gray-500 rounded-full px-4 py-2 bg-gray-800 max-w-60 flex-grow ml-8">
+            <div className="flex items-center border border-gray-500 rounded-full px-4 py-2 bg-gray-800 max-w-60 flex-grow    ml-8">
               <input
                 type="text"
                 placeholder="Search"
-                className="flex-grow text-white bg-transparent placeholder-gray-400 outline-none"
+                className="flex-grow text-white bg-transparent placeholder-gray-500 outline-none"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               <img
                 src={search}
@@ -112,13 +206,61 @@ export const LogoutHeader = () => {
                 className="w-5 h-5 ml-2 cursor-pointer invert"
               />
             </div>
+              {isPanelVisible && (
+                <div className="search-panel">
+                  <div className="fixed top-16 left-0 w-full h-[80vh] bg-white p-4 overflow-y-auto z-50">
+                    <div className="flex justify-between items-center mb-4">
+                      <h2 className="text-black text-lg">Related Products:</h2>
+                      <button 
+                        onClick={() => {
+                          setSearchResults([]); 
+                          setIsPanelVisible(false); 
+                        }} 
+                        className="text-black"
+                      >
+                        Close
+                      </button>
+                    </div>
+                    {searchResults.length > 0 ? (
+                      <ul>
+                        {searchResults.map((product) => (
+                          <li key={product._id} className="py-4 flex border-b border-gray-600">
+                            <img
+                              src={product.images[0]}
+                              alt={product.name}
+                              className="w-20 h-20 object-cover mr-4" 
+                            />
+                            <div className="flex-grow">
+                              <Link
+                                to={`/productDetails/${product._id}`}
+                                className="text-black hover:underline text-lg font-semibold"
+                                onClick={() => { 
+                                  setIsPanelVisible(false); 
+                                }}
+                              >
+                                {product.name}
+                              </Link>
+                              <p className="text-black text-sm">{product.description}</p>
+                              <p className="text-black font-bold mt-1">
+                                ₹{parseFloat(product.price.replace(/,/g, '')).toFixed(2)}
+                              </p>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-black">No results found.</p>
+                    )}
+                  </div>
+                </div>
+              )}
           </div>
         )}
 
 
         <div className="flex items-center space-x-4 relative">
           <Darkmode />
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <img
               src={profile}
               alt="profile"
@@ -131,7 +273,6 @@ export const LogoutHeader = () => {
                   <Link
                     to="/login"
                     className="block px-4 py-2 hover:bg-gray-700"
-                    onClick={handleDropdownItemClick}
                   >
                     Login
                   </Link>
@@ -140,7 +281,6 @@ export const LogoutHeader = () => {
                   <Link
                     to="/signup"
                     className="block px-4 py-2 hover:bg-gray-700"
-                    onClick={handleDropdownItemClick}
                   >
                     Signup
                   </Link>

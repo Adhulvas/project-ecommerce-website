@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
   res.send( "Hello world" );
 });
 
+
 app.use('/api', apiRouter)
 
 app.listen(port, () => {

@@ -1,5 +1,5 @@
 import e from "express";
-import { addNewProduct, deleteProduct, getAllProducts, getFeaturedProducts, getProductDetails, getProductsByCategory, getSellerProducts, getTrendingProducts, updateProduct } from "../controllers/productController.js";
+import { addNewProduct, deleteProduct, getAllProducts, getFeaturedProducts, getProductDetails, getProductsByCategory, getSellerProducts, getTrendingProducts, searchProducts, updateProduct } from "../controllers/productController.js";
 import { upload } from "../middlewares/multer.js";
 import { sellerOrAdminAuth } from "../middlewares/sellerOrAdminAuth.js";
 import { sellerAuth } from "../middlewares/sellerAuth.js";
@@ -16,7 +16,7 @@ router.get('/productDetails/:productId',getProductDetails);
 router.post('/add-product',sellerAuth,upload.array('image',12),addNewProduct);
 router.put('/update-product/:productId',sellerOrAdminAuth,upload.single('image'),updateProduct);
 router.delete('/delete-product/:productId',sellerOrAdminAuth,deleteProduct);
-router.get('/search')
+router.get('/search',searchProducts)
 
 
 export {router as productRouter}

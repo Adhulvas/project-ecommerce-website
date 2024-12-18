@@ -10,7 +10,6 @@ export const getCategories = async (req, res) => {
 };
 
 
-
 export const addCategory = async (req, res) => {
   try {
     if (req.admin.role !== 'admin') {

@@ -25,6 +25,8 @@ export const handlePayment = async (req,res)=>{
       success_url: `${process.env.FRONTEND_URL}/success`,
       cancel_url: `${process.env.FRONTEND_URL}/cancel`
     })
+
+
     res.json({ url: session.url })
   } catch (error) {
     console.error("Error creating Stripe session:", error);
