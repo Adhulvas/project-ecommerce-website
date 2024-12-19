@@ -54,7 +54,6 @@ export const CheckoutPage = () => {
       toast.error(error.response?.data?.error || "Payment initiation failed.");
     }
   };
-  
 
   
   const isAddressValid =

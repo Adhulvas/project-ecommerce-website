@@ -284,6 +284,6 @@ export const updateProduct = async (req,res)=> {
 export const searchProducts = async (req, res) => {
   const search = req.query.search || '';
   const query = search ? { name: new RegExp(search, 'i') } : {};
-  const products = await Product.find(query); // Adjust as needed for your DB
+  const products = await Product.find(query); 
   res.json(products);
 }

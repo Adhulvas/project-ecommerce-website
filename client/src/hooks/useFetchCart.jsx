@@ -21,5 +21,5 @@ export const useFetchCart = (endpoint) => {
     fetchCart();
   }, [endpoint]);
 
-  return [cart, loading, error, fetchCart]; // Expose fetchCart for manual refresh
+  return [cart, loading, error, fetchCart]; 
 };

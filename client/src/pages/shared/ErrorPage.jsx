@@ -8,10 +8,10 @@ export const ErrorPage = ({ role = 'user'}) => {
   }
 
   if(role == "seller"){
-     url.home = '/seller/dashboard'
+     url.home = '/seller/products/list'
   }
   if(role == "admin"){
-     url.home = '/admin/dashboard'
+     url.home = '/admin/products/list'
   }
 
   const navigate = useNavigate()

@@ -20,14 +20,14 @@ export const Login = ({ role = 'user'}) => {
   if (role === 'admin') {
     user.role = 'admin';
     user.login_api = '/admin/login';
-    user.profile_route = '/admin/dashboard';
+    user.profile_route = '/admin/products/list';
     user.signup_route = '/admin/signup';
   }   
 
   if (role === 'seller') {
     user.role = 'seller';
     user.login_api = '/seller/login';
-    user.profile_route = '/seller/dashboard'; 
+    user.profile_route = '/seller/products/list'; 
     user.signup_route = '/seller/signup'; 
   }
 

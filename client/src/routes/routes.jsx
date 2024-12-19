@@ -28,6 +28,7 @@ import { DetailedView } from "../pages/shared/DetailedView";
 import { Success } from "../components/user/Success";
 import { Cancel } from "../components/user/Cancel";
 import { CheckoutPage } from "../pages/user/CheckoutPage";
+import { RatingPage } from "../pages/user/RatingPage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <CheckoutPage/>,
+      },
+      {
+        path: "rate-review/:productId",
+        element: <RatingPage/>,
       },
     ]
   },

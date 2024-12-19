@@ -11,7 +11,7 @@ export const ProductListing = () => {
   
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const searchQuery = searchParams.get('search'); // Get the search query from the URL
+  const searchQuery = searchParams.get('search'); 
 
   useEffect(() => {
     const fetchProducts = async () => {

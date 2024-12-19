@@ -56,11 +56,6 @@ export const AdminSidebar = ({ isOpen }) => {
               </ul>
             )}
           </li>
-          <li className="py-2 px-4 hover:bg-gray-800">
-            <Link to="/orders" className="flex items-center">
-              <i className="fas fa-shopping-cart mr-3"></i> Orders
-            </Link>
-          </li>
         </ul>
       </nav>
     </div>

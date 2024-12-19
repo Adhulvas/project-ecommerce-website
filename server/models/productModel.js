@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const reviewSchema = new mongoose.Schema({
-  user:{
+  userId:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -18,6 +18,7 @@ const reviewSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  images: [String],
   createdAt:{ 
     type: Date,
     default: Date.now,

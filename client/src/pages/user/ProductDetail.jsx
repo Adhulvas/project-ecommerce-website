@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useFetchData } from "../../hooks/useFetch";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -9,12 +8,30 @@ export const ProductDetail = () => {
   const { isUserAuth } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const { productId } = useParams();
-  const [product, loading, error] = useFetchData(`product/productDetails/${productId}`);
+  const [product, setProduct] = useState(null); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isAddingToWishlist, setIsAddingToWishlist] = useState(false);
   const [sizeError, setSizeError] = useState("");
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        const response = await axiosInstance.get(`product/productDetails/${productId}`);
+        setProduct(response.data.data); 
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchProductDetails();
+  }, [productId]);
 
   if (loading) {
     return <div className="text-center">Loading...</div>;
@@ -27,7 +44,7 @@ export const ProductDetail = () => {
   if (!product) {
     return <div className="text-center">No product data available</div>;
   }
-
+  
   const handleAddToCart = async () => {
     if (!isUserAuth) {
       navigate("/login");
@@ -216,6 +233,19 @@ export const ProductDetail = () => {
                       </div>
                     </div>
                     <p>{review.comment}</p>
+
+                    {review.images && review.images.length > 0 && (
+                      <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1">
+                        {review.images.map((img, imgIndex) => (
+                          <img
+                            key={imgIndex}
+                            src={img}
+                            alt={`Review Image ${imgIndex + 1}`}
+                            className="object-cover h-24 rounded"
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
