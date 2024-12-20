@@ -24,7 +24,8 @@ export const Address = () => {
   const handleAddAddress = async (newAddress) => {
     try {
       const response = await axiosInstance.post("/user/add-address", { address: newAddress });
-      setAddresses((prev) => [...prev, response.data.data[0]]); 
+      await fetchAddresses();
+
       toast.success("Address added successfully.");
     } catch (error) {
       toast.error("Failed to add address.");
