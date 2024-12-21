@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-export const AddressForm = ({ defaultValues = {}, onSubmit, onClose }) => {
+export const AddressForm = ({ defaultValues = {}, onSubmit }) => {
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ export const AddressForm = ({ defaultValues = {}, onSubmit, onClose }) => {
           <input
             type={name === "phoneNumber" ? "tel" : "text"}
             {...register(name, { required })}
-            className={`mt-1 block w-full p-2 border rounded-md ${
+            className={`mt-1 block w-full px-2 py-4 border ${
               errors[name] ? "border-red-500" : "border-gray-300"
             }`}
           />
@@ -33,14 +33,9 @@ export const AddressForm = ({ defaultValues = {}, onSubmit, onClose }) => {
         </div>
       ))}
 
-      <div className="flex justify-end space-x-4">
-        <button type="button" onClick={onClose} className="text-gray-500">
-          Cancel
-        </button>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {defaultValues.addressTitle ? "Update Address" : "Add Address"}
-        </button>
-      </div>
+      <button type="submit" className="w-full px-4 py-4 bg-black text-white font-semibold rounded-md hover:bg-gray-800">
+        SAVE CHANGES
+      </button>
     </form>
   );
 };

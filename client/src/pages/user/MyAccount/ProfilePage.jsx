@@ -2,6 +2,11 @@ import React from "react";
 import toast from "react-hot-toast";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../config/axiosInstance";
+import { IoHome } from "react-icons/io5";
+import { FaHeart } from "react-icons/fa";
+import { IoSettings } from "react-icons/io5";
+import { FaUser } from "react-icons/fa";
+import { FaBoxOpen } from "react-icons/fa";
 
 export const ProfilePage = () => {
 
@@ -25,27 +30,27 @@ export const ProfilePage = () => {
         <ul className="space-y-4">
           <li>
             <Link to="overview" className="flex items-center text-gray-700 hover:text-blue-500">
-              <span className="mr-2">👤</span> Account Overview
+              <span className="mr-2"><FaUser /></span> Account Overview
             </Link>
           </li>
           <li>
             <Link to="orders" className="flex items-center text-gray-700 hover:text-blue-500">
-              <span className="mr-2">📦</span> My Orders
+              <span className="mr-2"><FaBoxOpen /></span> My Orders
             </Link>
           </li>
           <li>
             <Link to="/user/wishlist" className="flex items-center text-gray-700 hover:text-blue-500">
-              <span className="mr-2">❤️</span> Wishlist
+              <span className="mr-2"><FaHeart /></span> Wishlist
             </Link>
           </li>
           <li>
             <Link to="address" className="flex items-center text-gray-700 hover:text-blue-500">
-              <span className="mr-2">🏠</span> Addresses
+              <span className="mr-2"><IoHome /></span> Addresses
             </Link>
           </li>
           <li>
             <Link to="settings" className="flex items-center text-gray-700 hover:text-blue-500">
-              <span className="mr-2">⚙️</span> Account Settings
+              <span className="mr-2"><IoSettings /></span> Account Settings
             </Link>
           </li>
         </ul>

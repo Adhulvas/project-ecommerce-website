@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/wolf.jpg";
-import profile from "../../assets/profile.svg";
-import search from "../../assets/search.svg";
 import { Darkmode } from "../shared/Darkmode";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetchData } from "../../hooks/useFetch";
-import hamburgerMenu from "../../assets/hamburgerMenu.svg";
-import closeMenu from "../../assets/closeMenu.svg";
 import { axiosInstance } from "../../config/axiosInstance";
+import { FaRegUser } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineClose } from "react-icons/ai";
+
 
 export const LogoutHeader = () => {
   const [categories, loading, error] = useFetchData("/category/get-categories");
@@ -79,18 +80,10 @@ export const LogoutHeader = () => {
           {isMobile && (
             <div className="absolute left-4 flex items-center">
               <button onClick={() => setMenuOpen((prev) => !prev)}>
-                <img
-                  src={menuOpen ? closeMenu : hamburgerMenu}
-                  alt="Menu"
-                  className="w-6 h-6"
-                />
+                {menuOpen ? <AiOutlineClose /> : <GiHamburgerMenu  className="text-2xl mr-3"/>}
               </button>
               <button onClick={() => setIsSearchPanelVisible(true)}>
-                <img
-                  src={search}
-                  alt="Search Icon"
-                  className="w-6 h-6 cursor-pointer invert ml-4"
-                />
+                <IoSearch className="text-2xl"/>
               </button>
             </div>
           )}
@@ -109,7 +102,7 @@ export const LogoutHeader = () => {
                   setSearchResults([]);
                   setIsSearchPanelVisible(false);
                 }} className="text-black">
-                  ✕
+                  <AiOutlineClose className="text-xl"/>
                 </button>
               </div>
               <div className="overflow-y-auto h-full">
@@ -200,11 +193,7 @@ export const LogoutHeader = () => {
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
               />
-              <img
-                src={search}
-                alt="search"
-                className="w-5 h-5 ml-2 cursor-pointer invert"
-              />
+              <IoSearch className="text-2xl"/>
             </div>
               {isPanelVisible && (
                 <div className="search-panel">
@@ -218,7 +207,7 @@ export const LogoutHeader = () => {
                         }} 
                         className="text-black"
                       >
-                        Close
+                        <AiOutlineClose className="text-2xl"/>
                       </button>
                     </div>
                     {searchResults.length > 0 ? (
@@ -261,18 +250,16 @@ export const LogoutHeader = () => {
         <div className="flex items-center space-x-4 relative">
           <Darkmode />
           <div className="relative" ref={dropdownRef}>
-            <img
-              src={profile}
-              alt="profile"
-              className="w-5 h-5 cursor-pointer filter invert"
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            />
+            <FaRegUser className="text-xl" onClick={() => setDropdownOpen((prev) => !prev)}/>
             {dropdownOpen && (
               <ul className="absolute right-0 bg-gray-800 text-white rounded-md shadow-lg w-48 mt-2 z-10">
                 <li>
                   <Link
                     to="/login"
                     className="block px-4 py-2 hover:bg-gray-700"
+                    onClick={()=>{
+                      handleDropdownItemClick();
+                    }}
                   >
                     Login
                   </Link>
@@ -281,6 +268,9 @@ export const LogoutHeader = () => {
                   <Link
                     to="/signup"
                     className="block px-4 py-2 hover:bg-gray-700"
+                    onClick={()=>{
+                      handleDropdownItemClick();
+                    }}
                   >
                     Signup
                   </Link>
@@ -298,8 +288,9 @@ export const LogoutHeader = () => {
             onClick={() => setMenuOpen(false)}
             className="absolute top-4 right-4 text-white text-xl"
           >
-            ✕
+            <AiOutlineClose className="text-2xl"/>
           </button>
+
           <nav className="mt-16">
             {loading ? (
               <span>Loading...</span>

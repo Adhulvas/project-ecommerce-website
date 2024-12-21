@@ -2,10 +2,10 @@ import React from 'react';
 import { useFetchData } from '../../../hooks/useFetch';
 
 export const AccountOverview = () => {
-  const [userProfile, loading, error] = useFetchData("/user/profile");
+  const [userProfile] = useFetchData("/user/profile");
 
   return (
-    <div className="w-full p-4 md:p-8">
+    <div className="w-full p-4 md:p-8 mt-12">
       <h1 className="text-2xl md:text-3xl font-bold mb-4">Hello, {userProfile.name}</h1>
       <p className="text-gray-500 mb-8">Account Overview</p>
 

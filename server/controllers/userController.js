@@ -160,7 +160,6 @@ export const updateAddress = async (req, res) => {
 };
 
 
-
 export const deleteAddress = async(req,res)=>{
   const { addressId } = req.params;
   const userId = req.user.id;
@@ -208,31 +207,52 @@ export const userLogout = async(req,res,next)=>{
 }
 
 
-export const updateUserProfile = async (req,res)=>{
+export const updatePersonalDetails = async (req, res) => {
+  const { name, gender, dob } = req.body;
+  const userId = req.user.id
+
   try {
-    const userId = req.user.id;
-    const { name, email, mobileNumber,address } = req.body;
-
-    if (!name && !email && !mobileNumber) {
-      return res.status(400).json({ message: 'At least one field is required to update' });
-    }
-
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { name, email, mobileNumber, address },
-      { new: true, runValidators: true }
+      { name, gender, dob },
+      { new: true }
     );
 
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update personal details' });
+  }
+}
+
+
+export const updateLoginDetails = async (req, res) => {
+  const userId = req.user.id
+  const { email, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    res.status(200).json({ success:true, message:'Profile updated successfully',user });
+    const isPasswordMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ error: 'Current password is incorrect' });
+    }
 
-  } catch (error) {
-    res.status(500).json({ message:'Server error', error:error.message });
+    const hashedPassword = newPassword ? await bcrypt.hash(newPassword, 10) : undefined;
+
+    user.email = email || user.email;
+    user.password = hashedPassword || user.password;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Credentials updated successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update credentials' });
   }
-};
+}
 
 
 export const deleteUserAccount = async (req,res) => {

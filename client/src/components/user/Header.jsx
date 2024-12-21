@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef  } from "react";
 import logo from "../../assets/wolf.jpg";
-import wishlist from "../../assets/wishlist-svgrepo-com.svg";
-import cart from "../../assets/cart.svg";
-import profile from "../../assets/profile.svg";
-import search from "../../assets/search.svg";
 import { Darkmode } from "../shared/Darkmode";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import { useFetchData } from "../../hooks/useFetch";
 import toast from "react-hot-toast";
-import hamburgerMenu from "../../assets/hamburgerMenu.svg";
-import closeMenu from "../../assets/closeMenu.svg";
 import { useDispatch } from "react-redux";
 import { clearUserData } from "../../redux/features/userSlice";
+import { FaRegUser } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+import { RiShoppingCart2Line } from "react-icons/ri";
+import { IoSearch } from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineClose } from "react-icons/ai";
 
 export const Header = () => {
   const [categories, loading, error] = useFetchData("/category/get-categories");
@@ -35,12 +35,14 @@ export const Header = () => {
     }
   };
 
+
   useEffect(() => {
     window.addEventListener("click", handleClickOutside); 
     return () => {
       window.removeEventListener("click", handleClickOutside); 
     };
   }, []);
+
 
   const handleSearch = async (term) => {
     setSearchTerm(term); 
@@ -71,6 +73,7 @@ export const Header = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
   const logoutUser = async () => {
     try {
       const response = await axiosInstance.put("/user/logout");
@@ -83,6 +86,11 @@ export const Header = () => {
     }
   };
 
+
+  const handleDropdownItemClick = () => {
+    setDropdownOpen(false);
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-gray-900 text-white">
       <div className="flex items-center justify-between px-4 py-3 md:px-8">
@@ -92,18 +100,10 @@ export const Header = () => {
           {isMobile && (
             <div className="absolute left-4 flex items-center">
               <button onClick={() => setMenuOpen((prev) => !prev)}>
-                <img
-                  src={menuOpen ? closeMenu : hamburgerMenu}
-                  alt="Menu"
-                  className="w-6 h-6"
-                />
+                {menuOpen ? <AiOutlineClose /> : <GiHamburgerMenu  className="text-2xl mr-3"/>}
               </button>
               <button onClick={() => setIsSearchPanelVisible(true)}>
-                <img
-                  src={search}
-                  alt="Search Icon"
-                  className="w-6 h-6 cursor-pointer invert ml-4"
-                />
+                <IoSearch className="text-2xl"/>
               </button>
             </div>
           )}
@@ -122,7 +122,7 @@ export const Header = () => {
                   setSearchResults([]);
                   setIsSearchPanelVisible(false);
                 }} className="text-black">
-                  ✕
+                  <AiOutlineClose className="text-xl"/>
                 </button>
               </div>
               <div className="overflow-y-auto h-full">
@@ -214,11 +214,7 @@ export const Header = () => {
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
               />
-              <img
-                src={search}
-                alt="search"
-                className="w-5 h-5 ml-2 cursor-pointer invert"
-              />
+              <IoSearch className="text-2xl"/>
             </div>
               {isPanelVisible && (
                 <div className="search-panel">
@@ -232,7 +228,7 @@ export const Header = () => {
                         }} 
                         className="text-black"
                       >
-                        Close
+                        <AiOutlineClose className="text-2xl"/>
                       </button>
                     </div>
                     {searchResults.length > 0 ? (
@@ -277,34 +273,22 @@ export const Header = () => {
           {!isMobile && (
             <>
               <Link to="/user/wishlist">
-                <img
-                  src={wishlist}
-                  alt="wishlist"
-                  className="w-6 h-6 cursor-pointer filter invert"
-                />
+                <FaRegHeart className="text-xl" />
               </Link>
               <Link to="/user/cart">
-                <img
-                  src={cart}
-                  alt="cart"
-                  className="w-6 h-6 cursor-pointer filter invert"
-                />
+                <RiShoppingCart2Line className="text-2xl" />
               </Link>
             </>
           )}
           <div className="relative" ref={dropdownRef}>
-            <img
-              src={profile}
-              alt="profile"
-              className="w-5 h-5 cursor-pointer filter invert"
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            />
+            <FaRegUser  className="text-xl" onClick={() => setDropdownOpen((prev) => !prev)} />
             {dropdownOpen && (
               <ul className="absolute right-0 bg-gray-800 text-white rounded-md shadow-lg w-48 mt-2 z-10">
                 <li>
                   <Link
                     to="/user/profile/overview"
                     className="block px-4 py-2 hover:bg-gray-700"
+                    onClick={handleDropdownItemClick}
                   >
                     My Account
                   </Link>
@@ -313,6 +297,7 @@ export const Header = () => {
                   <Link
                     to="/user/profile/orders"
                     className="block px-4 py-2 hover:bg-gray-700"
+                    onClick={handleDropdownItemClick}
                   >
                     Orders
                   </Link>
@@ -321,6 +306,7 @@ export const Header = () => {
                   <Link
                     to="/user/wishlist"
                     className="block px-4 py-2 hover:bg-gray-700"
+                    onClick={handleDropdownItemClick}
                   >
                     Wishlist
                   </Link>
@@ -345,7 +331,7 @@ export const Header = () => {
             onClick={() => setMenuOpen(false)}
             className="absolute top-4 right-4 text-white text-xl"
           >
-            ✕
+            <AiOutlineClose className="text-2xl"/>
           </button>
 
           <nav className="mt-16">
@@ -387,13 +373,13 @@ export const Header = () => {
             <Link to="/user/wishlist" 
               className="flex items-center w-full py-3 text-white hover:bg-gray-700"
               onClick={() => setMenuOpen(false)}>
-              <img src={wishlist} alt="wishlist" className="w-6 h-6 mr-2 filter invert" />
+              <FaRegHeart className="text-xl mr-2" />
               Wishlist
             </Link>
             <Link to="/user/cart" 
               className="flex items-center w-full py-3 mt-4 text-white hover:bg-gray-700"
               onClick={() => setMenuOpen(false)}>
-              <img src={cart} alt="cart" className="w-6 h-6 mr-2 filter invert" />
+              <RiShoppingCart2Line className="text-2xl mr-2" />
               Cart
             </Link>
             <button

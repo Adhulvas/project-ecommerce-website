@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { axiosInstance } from "../config/axiosInstance";
 
 export const useFetchData = (endpoint) => {
@@ -6,8 +6,9 @@ export const useFetchData = (endpoint) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await axiosInstance({ url: endpoint });
         setData(response?.data?.data || {});
@@ -17,9 +18,12 @@ export const useFetchData = (endpoint) => {
       } finally {
         setLoading(false);
       }
-    };
-    fetchData();
-  }, [endpoint]);
+    }, [endpoint]);
 
-  return [data, loading, error];
+
+    useEffect(() => {
+      fetchData(); 
+    }, [fetchData]);
+
+  return [data, loading, error, fetchData];
 }

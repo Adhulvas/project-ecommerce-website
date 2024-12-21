@@ -2,29 +2,31 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 import { useAddToCart } from "../../hooks/useAddToCart";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWishlistFailure, fetchWishlistRequest, fetchWishlistSuccess, removeFromWishlist } from "../../redux/features/wishlistSlice";
+
 
 export const Wishlist = () => {
-  const [wishlistItems, setWishlistItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { items: wishlistItems, loading, error } = useSelector((state) => state.wishlist);
   const [loadingItemId, setLoadingItemId] = useState(null);
   const { addToCart } = useAddToCart();
 
+
   useEffect(() => {
     const fetchWishlist = async () => {
+      dispatch(fetchWishlistRequest());
       try {
-        setLoading(true);
         const response = await axiosInstance.get("/wishlist/get-wishlist");
-        setWishlistItems(response.data.wishlist.products || []);
+        dispatch(fetchWishlistSuccess(response.data.wishlist.products || []));
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch wishlist");
-      } finally {
-        setLoading(false);
+        dispatch(fetchWishlistFailure(err.response?.data?.message || "Failed to fetch wishlist"));
       }
     };
 
     fetchWishlist();
-  }, []);
+  }, [dispatch]);
+
 
   const handleAddToCart = async (item) => {
     const size = item.size || null;
@@ -43,6 +45,7 @@ export const Wishlist = () => {
     }
   };
 
+
   const handleRemoveFromWishlist = async (item) => {
     const productId = item.productId._id;
     const size = item.size || null;
@@ -50,7 +53,7 @@ export const Wishlist = () => {
       await axiosInstance.delete(`/wishlist/remove-from-wishlist`, {
         data: { productId, size },
       });
-      setWishlistItems((prevItems) => prevItems.filter((i) => i._id !== item._id));
+      dispatch(removeFromWishlist(item._id));
       toast.success("Product removed from wishlist successfully!");
     } catch (err) {
       console.error(err);
