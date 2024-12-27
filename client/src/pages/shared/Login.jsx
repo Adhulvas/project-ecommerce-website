@@ -2,7 +2,7 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 import logo from '../../assets/wolf.jpg'
-import logincover from '../../assets/cover3.jpg'
+import logincover from '../../assets/logincover.avif'
 import { axiosInstance } from '../../config/axiosInstance'
 import { useNavigate } from 'react-router-dom'
 
@@ -48,55 +48,58 @@ export const Login = ({ role = 'user'}) => {
     }
   }
   return (
- <div className="first-div flex items-center justify-center h-screen w-[90%] max-w-4xl mx-auto">
-  <div className='w-11/12 max-w-5xl bg-slate-300 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-6 box-border'>
+    <div className="first-div flex items-center justify-center h-screen w-[90%] max-w-4xl mx-auto px-4">
+      <div className="w-full bg-red-300 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-4 md:p-6 box-border">
+        {/* Image Section */}
+        <div className="hidden md:flex w-full md:w-1/2 p-1">
+          <img src={logincover} alt="Login Cover" className="w-full h-full object-cover rounded-lg" />
+        </div>
 
-    <div className='hidden md:flex w-full md:w-1/2 p-1'>
-      <img src={logincover} alt="Login Cover" className='w-full h-full object-cover rounded-3xl' />
-    </div>
+        {/* Form Section */}
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-4 py-6 md:px-6 md:py-8 bg-red-300 rounded-lg">
+          {/* Logo */}
+          <div className="w-16 h-16 bg-slate-500 rounded-full flex items-center justify-center mb-6">
+            <img src={logo} alt="Logo" className="w-14 h-14 rounded-full object-cover" />
+          </div>
 
+          {/* Welcome Message */}
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 text-center">Welcome Back</h1>
+          <p className="text-gray-600 mb-6 text-center">Please login to your account</p>
 
-    <div className='w-full md:w-1/2 flex flex-col items-center justify-center px-6 py-8 bg-slate-300 rounded-lg'>
-      {/* Logo */}
-      <div className='w-16 h-16 bg-slate-500 rounded-full flex items-center justify-center mb-6'>
-        <img src={logo} alt="Logo" className='w-14 h-14 rounded-full object-cover' />
+          {/* Login Form */}
+          <form className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
+            <input
+              type="text"
+              placeholder="Email address"
+              {...register('email')}
+              className="w-full mb-4 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              {...register('password')}
+              className="w-full mb-4 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+            <p className="text-right text-indigo-500 text-sm mb-6 cursor-pointer">Forgot password?</p>
+            <button className="w-full bg-indigo-500 text-white py-3 rounded-full hover:bg-indigo-600 transition duration-200">
+              Login
+            </button>
+          </form>
+
+          {/* Register Link */}
+          <p className="text-gray-600 mt-6 text-center">
+            Don't have an account?{' '}
+            <span
+              onClick={() => navigate(user.signup_route)}
+              className="text-indigo-500 cursor-pointer hover:underline"
+            >
+              Register
+            </span>
+          </p>
+        </div>
       </div>
-
-      {/* Welcome Message */}
-      <h1 className='text-4xl font-bold text-gray-800'>Welcome Back</h1>
-      <p className="text-gray-600 mb-6">Please login to your account</p>
-
-      {/* Login Form */}
-      <form className="w-full max-w-sm" onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="text"
-          placeholder="Email address"
-          {...register('email')}
-          className='w-full mb-2 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500'
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          {...register('password')}
-          className='w-full mb-1 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500'
-          required
-        />
-        <p className='text-right text-indigo-500 text-sm mb-4 cursor-pointer'>
-          Forgot password?
-        </p>
-        <button className='w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600'>
-          Login
-        </button>
-      </form>
-
-      {/* Register Link */}
-      <p className='text-gray-600 mt-6'>
-        Don't have an account?{" "}
-        <span onClick={() => navigate(user.signup_route)} className="text-indigo-500 cursor-pointer">Register</span>
-      </p>
     </div>
-  </div>
- </div>
   )
 };

@@ -49,13 +49,10 @@ export const Home = () => {
             <div className="absolute inset-0 bg-black opacity-15"></div>
             <div className="flex flex-col items-center justify-end h-full relative text-white text-center">
                 <button
-                    className="relative bg-white py-2 px-6 rounded-lg shadow-md transition duration-300 hover:shadow-lg mb-5"
+                    className="relative py-3 mb-5 px-8 font-bold text-white rounded-lg bg-gradient-to-br from-stone-500 to-yellow-500 shadow-lg transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl hover:bg-gradient-to-bl hover:from-pink-500 hover:to-stone-500 active:scale-95 focus:outline-none focus:ring-4 focus:ring-pink-200"
                     onClick={() => navigate("/categories/Men/Clothing")}
-                >
-                    <span className="absolute inset-0 opacity-10 bg-black blur-md transition duration-300"></span>
-                    <span className="relative text-transparent bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text">
-                        Shop Now
-                    </span>
+                    >
+                    Shop Now
                 </button>
             </div>
         </section>

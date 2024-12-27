@@ -14,7 +14,7 @@ router.get('/get-all-products',adminAuth, getAllProducts);
 router.get('/get-seller-products',sellerAuth, getSellerProducts);
 router.get('/productDetails/:productId',getProductDetails);
 router.post('/add-product',sellerAuth,upload.array('image',12),addNewProduct);
-router.put('/update-product/:productId',sellerOrAdminAuth,upload.single('image'),updateProduct);
+router.put('/update-product/:productId',sellerOrAdminAuth,upload.array('image'),updateProduct);
 router.delete('/delete-product/:productId',sellerOrAdminAuth,deleteProduct);
 router.get('/search',searchProducts)
 

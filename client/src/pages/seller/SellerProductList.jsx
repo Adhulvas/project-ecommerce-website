@@ -1,28 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import view from '../../assets/view.svg'
-import remove from '../../assets/delete.svg'
-import edit from '../../assets/edit.svg'
+// import view from '../../assets/view.svg'
+// import remove from '../../assets/delete.svg'
+// import edit from '../../assets/edit.svg'
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../config/axiosInstance';
 import { ConfirmModal } from '../../components/seller/ConfirmModal';
 import { useDeleteProduct } from '../../hooks/useDeleteProduct';
+import { IoIosEye } from "react-icons/io";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 export const SellerProductList = () => {
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchProducts = async ()=>{
+  // const fetchProducts = async ()=>{
+  //   try {
+  //     const response = await axiosInstance.get('product/get-seller-products')
+  //     console.log(response)
+  //     setProducts(response.data.data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  const fetchProducts = async (page = 1) => {
     try {
-      const response = await axiosInstance.get('product/get-seller-products')
-      console.log(response)
-      setProducts(response.data.data)
+      const response = await axiosInstance.get(`product/get-seller-products?page=${page}&limit=15`);
+      setProducts(response.data.data);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const { deleteProduct } = useDeleteProduct(fetchProducts);
+  // const { deleteProduct } = useDeleteProduct(fetchProducts);
+  const { deleteProduct } = useDeleteProduct(() => fetchProducts(currentPage));
   const navigate = useNavigate()
 
   useEffect(()=>{
@@ -38,6 +54,11 @@ export const SellerProductList = () => {
     deleteProduct(selectedProduct); 
     setIsModalOpen(false);
     setSelectedProduct(null);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts(page);
   };
 
   return (
@@ -91,17 +112,21 @@ export const SellerProductList = () => {
                     <button 
                       className="bg-blue-100 p-2 rounded" 
                       onClick={() => navigate(`/seller/products/view/${product._id}`)}>
-                      <img src={view} className='w-5 h-5'/>
+                      {/* <img src={view} className='w-5 h-5'/> */}
+                      <IoIosEye />
                     </button>
                     <button 
                       className="bg-yellow-100 p-2 rounded"
                       onClick={() => navigate(`/seller/products/edit/${product._id}`)}>
-                      <img src={edit} className='w-5 h-5' />
+                      {/* <img src={edit} className='w-5 h-5' /> */}
+                      <MdEdit />
                     </button>
                     <button
                       className="bg-red-100 p-2 rounded"
                       onClick={() => handleDeleteClick(product._id)}>
-                      <img src={remove} className='w-5 h-5' /></button>
+                      {/* <img src={remove} className='w-5 h-5' /> */}
+                      <MdDelete />
+                    </button>
 
                       <ConfirmModal
                         isOpen={isModalOpen}
@@ -117,17 +142,42 @@ export const SellerProductList = () => {
         </table>
       </div>
       <div className="flex justify-between items-center mt-4">
-        <div>
+        {/* <div>
           <button className="px-4 py-2 border rounded">Previous</button>
-        </div>
-        <div className="flex gap-2">
+        </div> */}
+        <button
+          disabled={currentPage === 1}
+          className={`px-4 py-2 border rounded ${currentPage === 1 ? 'bg-gray-200 cursor-not-allowed' : ''}`}
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
+          Previous
+        </button>
+        {/* <div className="flex gap-2">
           <button className="px-4 py-2 bg-orange-500 text-white rounded">1</button>
           <button className="px-4 py-2 border rounded">2</button>
           <button className="px-4 py-2 border rounded">3</button>
+        </div> */}
+        <div className="flex gap-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => handlePageChange(i + 1)}
+              className={`px-4 py-2 border rounded ${currentPage === i + 1 ? 'bg-orange-500 text-white' : ''}`}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
-        <div>
+        {/* <div>
           <button className="px-4 py-2 border rounded">Next</button>
-        </div>
+        </div> */}
+        <button
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 border rounded ${currentPage === totalPages ? 'bg-gray-200 cursor-not-allowed' : ''}`}
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

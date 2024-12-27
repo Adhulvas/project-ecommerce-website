@@ -74,14 +74,47 @@ export const getAllProducts = async (req, res) => {
 };
 
 
+// export const getSellerProducts = async (req, res) => {
+//   try {
+//     const sellerId = req.seller.id;
+
+//     const products = await Product.find({ seller: sellerId })
+//       .populate('category', 'name') 
+//       .populate('subcategory', 'name')
+//       .exec();
+
+//     if (products.length === 0) {
+//       return res.status(404).json({ message: 'No products found for this seller' });
+//     }
+
+//     res.status(200).json({
+//       message: 'Seller products fetched successfully',
+//       data: products,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       message: 'Failed to fetch seller products',
+//       error: error.message || 'Internal server error',
+//     });
+//   }
+// };
+
+
 export const getSellerProducts = async (req, res) => {
   try {
     const sellerId = req.seller.id;
+    const { page = 1, limit = 10 } = req.query; // Default page: 1, Default limit: 10
+    const skip = (page - 1) * limit;
 
     const products = await Product.find({ seller: sellerId })
-      .populate('category', 'name') 
+      .populate('category', 'name')
       .populate('subcategory', 'name')
+      .skip(skip) // Skip documents for pagination
+      .limit(parseInt(limit)) // Limit the number of results per page
       .exec();
+
+    const totalProducts = await Product.countDocuments({ seller: sellerId });
 
     if (products.length === 0) {
       return res.status(404).json({ message: 'No products found for this seller' });
@@ -90,6 +123,9 @@ export const getSellerProducts = async (req, res) => {
     res.status(200).json({
       message: 'Seller products fetched successfully',
       data: products,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts,
     });
   } catch (error) {
     console.error(error);
@@ -99,6 +135,7 @@ export const getSellerProducts = async (req, res) => {
     });
   }
 };
+
 
 
 export const getProductDetails = async(req,res)=>{
@@ -239,7 +276,9 @@ export const updateProduct = async (req,res)=> {
   try {
     const { role, id: userId } = req.user;
     const { productId } = req.params;
-    const { name, description, price, category, subcategory, sizeRequired,availableSizes } = req.body;
+    const { name, description, price, category, subcategory, sizeRequired,availableSizes, discount } = req.body;
+    console.log('Update Product Data:', req.body);
+
 
     if (role !== 'admin' && role !== 'seller') {
       return res.status(403).json({ message: 'Only admins or sellers can update products' });
@@ -262,11 +301,17 @@ export const updateProduct = async (req,res)=> {
     if (subcategory) updateFields.subcategory = subcategory;
     if (sizeRequired !== undefined) updateFields.sizeRequired = sizeRequired;
     if (availableSizes) updateFields.availableSizes = availableSizes;
+    if (discount) updateFields.discount = discount;
 
-    if (req.file) {
-      const uploadResponse = await cloudinaryInstance.uploader.upload(req.file.path);
-      updateFields.image = uploadResponse.url;
-    }
+
+    if (req.files && req.files.length > 0) {
+      const uploadedImageUrls = [];
+      for (const file of req.files) {
+          const uploadResponse = await cloudinaryInstance.uploader.upload(file.path);
+          uploadedImageUrls.push(uploadResponse.url);
+      }
+      updateFields.images = uploadedImageUrls;
+  }
 
     const updatedProduct = await Product.findByIdAndUpdate(
       productId,

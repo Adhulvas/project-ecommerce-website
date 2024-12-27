@@ -68,8 +68,8 @@ export const EmailPasswordModal = ({ userProfile, onClose }) => {
               {...register("newPassword", {
                 required: "New password is required",
                 minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters long",
+                  value: 5,
+                  message: "Password must be at least 5 characters long",
                 },
               })}
               className="w-full px-3 py-4 border focus:outline-none focus:ring focus:ring-blue-500"

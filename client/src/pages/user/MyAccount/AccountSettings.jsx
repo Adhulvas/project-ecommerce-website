@@ -33,7 +33,7 @@ export const AccountSettings = () => {
                 <strong>Date Of Birth: </strong>
                 {userProfile.dob ? new Date(userProfile.dob).toISOString().slice(0, 10) : "Not provided"}
               </p>
-              <p><strong>Phone: </strong>+91{phoneNumber}</p>
+              <p><strong>Phone: </strong>{phoneNumber}</p>
             </div>
             <button onClick={togglePersonalModal}>
               <img src={edit} alt="edit" className="text-black w-6 h-6" />
