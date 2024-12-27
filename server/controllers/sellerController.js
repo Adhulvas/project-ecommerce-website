@@ -36,6 +36,7 @@ export const sellerSignup  = async(req,res,next)=>{
   }
 }
 
+
 export const sellerLogin = async(req,res,next)=>{
   try {
     const {email,password} = req.body
@@ -155,7 +156,6 @@ export const deleteSellerAccount = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
-
 
 
 export const checkSeller = async(req,res,next)=>{

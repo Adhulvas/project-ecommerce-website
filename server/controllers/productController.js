@@ -74,44 +74,17 @@ export const getAllProducts = async (req, res) => {
 };
 
 
-// export const getSellerProducts = async (req, res) => {
-//   try {
-//     const sellerId = req.seller.id;
-
-//     const products = await Product.find({ seller: sellerId })
-//       .populate('category', 'name') 
-//       .populate('subcategory', 'name')
-//       .exec();
-
-//     if (products.length === 0) {
-//       return res.status(404).json({ message: 'No products found for this seller' });
-//     }
-
-//     res.status(200).json({
-//       message: 'Seller products fetched successfully',
-//       data: products,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({
-//       message: 'Failed to fetch seller products',
-//       error: error.message || 'Internal server error',
-//     });
-//   }
-// };
-
-
 export const getSellerProducts = async (req, res) => {
   try {
     const sellerId = req.seller.id;
-    const { page = 1, limit = 10 } = req.query; // Default page: 1, Default limit: 10
+    const { page = 1, limit = 10 } = req.query; 
     const skip = (page - 1) * limit;
 
     const products = await Product.find({ seller: sellerId })
       .populate('category', 'name')
       .populate('subcategory', 'name')
-      .skip(skip) // Skip documents for pagination
-      .limit(parseInt(limit)) // Limit the number of results per page
+      .skip(skip)
+      .limit(parseInt(limit)) 
       .exec();
 
     const totalProducts = await Product.countDocuments({ seller: sellerId });
@@ -135,7 +108,6 @@ export const getSellerProducts = async (req, res) => {
     });
   }
 };
-
 
 
 export const getProductDetails = async(req,res)=>{

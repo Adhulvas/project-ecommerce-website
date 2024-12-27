@@ -72,7 +72,6 @@ export const getCart = async (req, res) => {
 };
 
 
-
 export const addToCart = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -134,7 +133,6 @@ export const addToCart = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
-
 
 
 export const removeCartProduct = async(req,res)=>{

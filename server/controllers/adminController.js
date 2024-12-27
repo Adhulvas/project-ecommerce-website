@@ -36,6 +36,7 @@ export const adminSignup  = async(req,res,next)=>{
   }
 }
 
+
 export const adminLogin = async(req,res,next)=>{
   try {
     const {email,password} = req.body
@@ -155,7 +156,6 @@ export const deleteAdminAccount = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
-
 
 
 export const checkAdmin = async(req,res,next)=>{
