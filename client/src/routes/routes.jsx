@@ -29,7 +29,7 @@ import { CheckoutPage } from "../pages/user/CheckoutPage";
 import { RatingPage } from "../pages/user/RatingPage";
 import { OrderManagement } from "../pages/seller/OrderManagement";
 import { AdminDashBoard } from "../pages/admin/AdminDashBoard";
-import { SellerDashBoard } from "../pages/seller/SellerDashboard";
+import { SellerDashBoard } from "../pages/seller/SellerDashBoard";
 
 export const router = createBrowserRouter([
   {
