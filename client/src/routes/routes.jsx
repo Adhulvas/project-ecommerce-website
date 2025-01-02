@@ -11,8 +11,6 @@ import { SellerLayout } from "../layout/SellerLayout";
 import { UserLayout } from "../layout/UserLayout";
 import { ListCategories } from "../pages/admin/ListCategories";
 import { AdminLayout } from "../layout/AdminLayout";
-import { SellerDashboard } from "../pages/seller/SellerDashBoard";
-import { DashBoard } from "../pages/admin/DashBoard";
 import { Address } from "../pages/user/MyAccount/Address";
 import { AccountSettings } from "../pages/user/MyAccount/AccountSettings";
 import { AccountOverview } from "../pages/user/MyAccount/AccountOverview";
@@ -29,6 +27,10 @@ import { Success } from "../components/user/Success";
 import { Cancel } from "../components/user/Cancel";
 import { CheckoutPage } from "../pages/user/CheckoutPage";
 import { RatingPage } from "../pages/user/RatingPage";
+import { OrderManagement } from "../pages/seller/OrderManagement";
+import { AdminDashBoard } from "../pages/admin/AdminDashBoard";
+import { SellerDashBoard } from "../pages/seller/SellerDashboard";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -116,15 +118,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <SellerDashboard/>,
+        element: <SellerDashBoard/>
       },
       {
         path: "signup",
         element: <Signup role="seller"/>,
-      },
-      {
-        path: "login",
-        element: <Login role="seller"/>,
       },
       {
         path: "login",
@@ -145,6 +143,10 @@ export const router = createBrowserRouter([
       {
         path: "products/list",
         element: <SellerProductList/>,
+      },
+      {
+        path: "order-management",
+        element: <OrderManagement/>,
       }
     ]
   },
@@ -155,7 +157,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <DashBoard/>,
+        element: <AdminDashBoard/>,
       },
       {
         path: "signup",
@@ -184,7 +186,7 @@ export const router = createBrowserRouter([
       {
         path: "products/edit/:productId",
         element: <UpdateProduct/>,
-      },
+      }
     ]
   },
 ]);

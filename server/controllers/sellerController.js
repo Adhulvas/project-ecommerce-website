@@ -1,8 +1,10 @@
 import { Seller } from "../models/sellerModel.js"
 import bcrypt from 'bcrypt'
 import { generateToken } from "../utils/token.js"
+import { Order } from "../models/orderModel.js"
+import { Product } from "../models/productModel.js"
 
-export const sellerSignup  = async(req,res,next)=>{
+export const sellerSignup  = async(req,res)=>{
   try {
     const {name,email,password}=req.body
 
@@ -37,7 +39,7 @@ export const sellerSignup  = async(req,res,next)=>{
 }
 
 
-export const sellerLogin = async(req,res,next)=>{
+export const sellerLogin = async(req,res)=>{
   try {
     const {email,password} = req.body
 
@@ -73,7 +75,7 @@ export const sellerLogin = async(req,res,next)=>{
 }
 
 
-export const sellerProfile = async(req,res,next)=>{
+export const sellerProfile = async(req,res)=>{
   try {
 
     const sellerId = req.seller.id
@@ -92,7 +94,7 @@ export const sellerProfile = async(req,res,next)=>{
 }
 
 
-export const sellerLogout = async(req,res,next)=>{
+export const sellerLogout = async(req,res)=>{
   try {
     res.clearCookie('token', {
       sameSite: "None",
@@ -107,7 +109,7 @@ export const sellerLogout = async(req,res,next)=>{
 }
 
 
-export const updateSellerProfile = async (req,res,next)=>{
+export const updateSellerProfile = async (req,res)=>{
   try {
     const { name, email, mobileNumber, address } = req.body;
     const sellerId = req.seller.id;
@@ -130,6 +132,29 @@ export const updateSellerProfile = async (req,res,next)=>{
     
   } catch (error) {
     res.status(500).json({ message:'Server error',error });
+  }
+};
+
+
+export const getSellerOrders = async (req, res) => {
+  try {
+    const sellerId = req.seller.id; 
+
+    const sellerProducts = await Product.find({ seller: sellerId }).select('_id');
+
+    const sellerProductIds = sellerProducts.map((product) => product._id);
+
+
+    const orders = await Order.find({
+      'items.productId': { $in: sellerProductIds },
+    })
+    .populate('items.productId', 'description images price')
+    .populate('userId', 'name');
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching seller orders:', error.message);
+    res.status(500).json({ error: 'Failed to fetch orders for seller' });
   }
 };
 
@@ -158,7 +183,7 @@ export const deleteSellerAccount = async (req, res) => {
 };
 
 
-export const checkSeller = async(req,res,next)=>{
+export const checkSeller = async(req,res)=>{
   try {
     res.json({ success:true, message:"seller authorized" })
     

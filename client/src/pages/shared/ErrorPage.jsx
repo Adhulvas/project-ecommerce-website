@@ -2,17 +2,17 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const ErrorPage = ({ role = 'user'}) => {
-
   const url = {
     home: "/"
   }
 
-  if(role == "seller"){
-     url.home = '/seller/products/list'
+  if(role === "seller"){
+     url.home = '/seller/dashboard'
   }
-  if(role == "admin"){
-     url.home = '/admin/products/list'
+  if(role === "admin"){
+     url.home = '/admin/dashboard'
   }
+
 
   const navigate = useNavigate()
   return (

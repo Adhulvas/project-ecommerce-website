@@ -70,24 +70,24 @@ export const Signup = ({ role = "user" }) => {
               type="text"
               placeholder="Name"
               {...register("name")}
-              className="w-full mb-2 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-2 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <input
               type="email"
               placeholder="Email address"
               {...register("email")}
-              className="w-full mb-2 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-2 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <input
               type="password"
               placeholder="Password"
               {...register("password")}
-              className="w-full mb-4 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-4 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
-            <button className="w-full bg-indigo-500 text-white py-3 rounded-full hover:bg-indigo-600">
+            <button className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600">
               Register
             </button>
           </form>

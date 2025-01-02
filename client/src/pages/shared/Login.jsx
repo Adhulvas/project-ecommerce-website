@@ -20,14 +20,14 @@ export const Login = ({ role = 'user'}) => {
   if (role === 'admin') {
     user.role = 'admin';
     user.login_api = '/admin/login';
-    user.profile_route = '/admin/products/list';
+    user.profile_route = '/admin/dashboard';
     user.signup_route = '/admin/signup';
   }   
 
   if (role === 'seller') {
     user.role = 'seller';
     user.login_api = '/seller/login';
-    user.profile_route = '/seller/products/list'; 
+    user.profile_route = '/seller/dashboard'; 
     user.signup_route = '/seller/signup'; 
   }
 
@@ -47,6 +47,8 @@ export const Login = ({ role = 'user'}) => {
       console.error(error)
     }
   }
+
+
   return (
     <div className="first-div flex items-center justify-center h-screen w-[90%] max-w-4xl mx-auto px-4">
       <div className="w-full bg-red-300 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-4 md:p-6 box-border">
@@ -72,18 +74,18 @@ export const Login = ({ role = 'user'}) => {
               type="text"
               placeholder="Email address"
               {...register('email')}
-              className="w-full mb-4 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-4 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <input
               type="password"
               placeholder="Password"
               {...register('password')}
-              className="w-full mb-4 p-3 rounded-full border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-4 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               required
             />
             <p className="text-right text-indigo-500 text-sm mb-6 cursor-pointer">Forgot password?</p>
-            <button className="w-full bg-indigo-500 text-white py-3 rounded-full hover:bg-indigo-600 transition duration-200">
+            <button className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600 transition duration-200">
               Login
             </button>
           </form>

@@ -44,6 +44,12 @@ export const SideBar = ({ isOpen }) => {
               </ul>
             )}
           </li>
+
+          <li className="py-2 px-4 hover:bg-gray-800">
+            <Link to="/seller/order-management" className="flex items-center">
+              <i className="fas fa-chart-line mr-3"></i> Order Management
+            </Link>
+          </li>
         </ul>
       </nav>
     </div>

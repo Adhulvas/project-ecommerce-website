@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { toggleCategoryDropdown, toggleProductDropdown } from "../../redux/features/dropdownSlice";
+import { toggleCategoryDropdown } from "../../redux/features/dropdownSlice";
 
 export const AdminSidebar = ({ isOpen }) => {
   const dispatch = useDispatch()
-  const { isCategoryDropdownOpen,isProductDropdownOpen } = useSelector((state)=>state.dropdown)
+  const { isCategoryDropdownOpen } = useSelector((state)=>state.dropdown)
 
   return (
     <div
@@ -38,23 +38,10 @@ export const AdminSidebar = ({ isOpen }) => {
               </ul>
             )}
           </li>
-          <li className="relative">
-            <button
-              onClick={()=>dispatch(toggleProductDropdown())}
-              className="flex items-center py-2 px-4 w-full text-left hover:bg-gray-800"
-            >
-              <i className="fas fa-box mr-3"></i> Products
-              <i className={`fas fa-chevron-down ml-auto ${isProductDropdownOpen ? 'transform rotate-180' : ''}`}></i>
-            </button>
-            {isProductDropdownOpen && (
-              <ul className="bg-gray-800 ml-6 mt-2 rounded-lg shadow-lg">
-                <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to="/admin/products/list" className="flex items-center">
-                    List
-                  </Link>
-                </li>
-              </ul>
-            )}
+          <li className="py-2 px-4 hover:bg-gray-800">
+            <Link to="/admin/products/list" className="flex items-center">
+              <i className="fas fa-chart-line mr-3"></i> Products
+            </Link>
           </li>
         </ul>
       </nav>

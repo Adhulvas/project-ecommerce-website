@@ -22,6 +22,26 @@ export const Orders = () => {
     fetchOrders();
   }, []);
 
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Pending':
+        return 'text-yellow-500';
+      case 'Processing':
+        return 'text-blue-500';
+      case 'Shipped':
+        return 'text-lightblue-500'; 
+      case 'Delivered':
+        return 'text-green-500';
+      case 'Cancelled':
+        return 'text-red-500';
+      case 'Returned':
+        return 'text-purple-500'; 
+      default:
+        return 'text-gray-500'; 
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen mt-16">
       <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">My Orders</h1>
@@ -31,9 +51,9 @@ export const Orders = () => {
         <ul className="space-y-4">
           {orders.map((order) => (
             <li key={order._id} className="p-4 bg-white rounded shadow">
-              <p className="text-sm md:text-base text-gray-500">
-                Placed On: {new Date(order.createdAt).toLocaleString()}
-              </p>
+                <p className="text-sm md:text-base text-gray-500">
+                  Placed On: {new Date(order.createdAt).toLocaleString()} <span className={`font-semibold ${getStatusColor(order.status)}`}>{order.status}</span>
+                </p>
               <div className="mt-4 space-y-4">
                 {order.items.map((item) => {
                   const { productId, price, quantity } = item;

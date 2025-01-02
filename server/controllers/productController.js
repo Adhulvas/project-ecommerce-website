@@ -56,20 +56,54 @@ export const getFeaturedProducts = async (req, res) => {
 };
 
 
+// export const getAllProducts = async (req, res) => {
+//   try {
+//     const products = await Product.find()
+//       .populate('seller', 'name')
+//       .populate('subcategory', 'name');
+
+//     if (products.length === 0) {
+//       return res.status(404).json({ message: 'No products found' });
+//     }
+
+//     res.status(200).json({ message: 'Products fetched successfully', data: products });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Failed to fetch products', error: error.message || 'Internal server error' });
+//   }
+// };
+
+
 export const getAllProducts = async (req, res) => {
   try {
+    const { page = 1, limit = 10 } = req.query; 
+    const skip = (page - 1) * limit;
+
     const products = await Product.find()
       .populate('seller', 'name')
-      .populate('subcategory', 'name');
+      .populate('subcategory', 'name')
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const totalProducts = await Product.countDocuments();
 
     if (products.length === 0) {
       return res.status(404).json({ message: 'No products found' });
     }
 
-    res.status(200).json({ message: 'Products fetched successfully', data: products });
+    res.status(200).json({
+      message: 'Products fetched successfully',
+      data: products,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to fetch products', error: error.message || 'Internal server error' });
+    res.status(500).json({
+      message: 'Failed to fetch products',
+      error: error.message || 'Internal server error',
+    });
   }
 };
 

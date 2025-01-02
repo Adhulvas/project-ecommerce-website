@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from '../../assets/wolf.jpg'
+import { FaRegUserCircle } from "react-icons/fa";
 
 export const AdminHeader = ({ toggleSidebar }) => {
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+    const dropdownRef = useRef(null);
+  
+    const handleDropdownToggle = () => {
+      setIsDropdownOpen((prev) => !prev); 
+    };
+
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+  
+    const handleOptionClick = () => {
+      setIsDropdownOpen(false);
+    };
+  
+    useEffect(() => {
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }, []);
+
   return (
     <div className="navbar bg-slate-300 fixed top-0 left-0 w-full z-10 shadow">
       <div className="navbar-start">
@@ -30,7 +56,7 @@ export const AdminHeader = ({ toggleSidebar }) => {
       <div className="navbar-center">
         <img src={logo} alt="" className="w-12 h-12 rounded-full object-cover cursor-pointer" />
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end" ref={dropdownRef}>
         <button className="btn btn-ghost btn-circle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -66,6 +92,28 @@ export const AdminHeader = ({ toggleSidebar }) => {
             <span className="badge badge-xs badge-primary indicator-item"></span>
           </div>
         </button>
+        <button className="btn btn-ghost btn-circle" onClick={handleDropdownToggle}>
+          <FaRegUserCircle  className="h-5 w-5" />
+        </button>
+
+        {isDropdownOpen && (
+          <div className="absolute right-6 mt-32 w-48 bg-white border rounded shadow-lg">
+            <ul className="py-1">
+              <li>
+                <a 
+                href="/admin/login" 
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                onClick={handleOptionClick}>Login</a>
+              </li>
+              <li>
+                <a 
+                href="/admin/signup" 
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                onClick={handleOptionClick}>Signup</a>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

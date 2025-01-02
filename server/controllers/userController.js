@@ -192,7 +192,7 @@ export const deleteAddress = async(req,res)=>{
 };
 
 
-export const userLogout = async(req,res,next)=>{
+export const userLogout = async(req,res)=>{
   try {
     res.clearCookie('token', {
       sameSite: "None",
