@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import { Card } from "../../components/user/Card";
 import { AiFillCaretRight } from "react-icons/ai";
@@ -10,9 +10,6 @@ export const ProductListing = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const searchQuery = searchParams.get('search'); 
 
   useEffect(() => {
     const fetchProducts = async () => {

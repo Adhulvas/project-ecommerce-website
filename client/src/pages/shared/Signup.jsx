@@ -17,19 +17,21 @@ export const Signup = ({ role = "user" }) => {
     homepage_route:'/'
   };
 
-  if (role === "mentor") {
-    user.role = "mentor";
-    user.signup_api = "/mentor/signup";
-    user.login_route = "/mentor/login";
+  if (role === "admin") {
+    user.role = "admin";
+    user.signup_api = "/admin/signup";
+    user.login_route = "/admin/login",
+    user.homepage_route = '/admin/dashboard'
   }
 
   if (role === "seller") {
     user.role = "seller";
     user.signup_api = "/seller/signup";
-    user.login_route = "/seller/login";
+    user.login_route = "/seller/login",
+    user.homepage_route = '/seller/dashboard'
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async(data) => {
     try {
       const response = await axiosInstance({
         method: "POST",

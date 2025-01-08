@@ -38,8 +38,6 @@ export const Login = ({ role = 'user'}) => {
         url: user.login_api,
         data
       })
-
-      console.log(response, "====response");
       toast.success("Log-in success")
       navigate(user.profile_route)
     } catch (error) {

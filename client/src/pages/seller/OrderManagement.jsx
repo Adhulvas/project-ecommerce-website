@@ -64,7 +64,7 @@ export const OrderManagement = () => {
           {orders.map((order) => (
             <tr key={order._id}>
               <td className="border p-2">{order._id}</td>
-              <td className="border p-2">{order.userId.name}</td>
+              <td className="border p-2">{order.userId?.name}</td>
               <td className="border p-2">{new Date(order.createdAt).toLocaleString()}</td>
               <td className="border p-2">₹{calculateTotalPrice(order.items).toLocaleString()}</td>
               <td className="border p-2">{order.status}</td>
@@ -79,7 +79,6 @@ export const OrderManagement = () => {
                   <option value="Shipped">Shipped</option>
                   <option value="Delivered">Delivered</option>
                   <option value="Cancelled">Cancelled</option>
-                  <option value="Cancelled">Returned</option>
                 </select>
               </td>
             </tr>

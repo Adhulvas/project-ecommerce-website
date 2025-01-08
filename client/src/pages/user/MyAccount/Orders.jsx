@@ -35,8 +35,6 @@ export const Orders = () => {
         return 'text-green-500';
       case 'Cancelled':
         return 'text-red-500';
-      case 'Returned':
-        return 'text-purple-500'; 
       default:
         return 'text-gray-500'; 
     }

@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const ErrorPage = ({ role = 'user'}) => {
+  const navigate = useNavigate()
   const url = {
     home: "/"
   }
@@ -13,8 +14,6 @@ export const ErrorPage = ({ role = 'user'}) => {
      url.home = '/admin/dashboard'
   }
 
-
-  const navigate = useNavigate()
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col justify-center items-center text-center">
       <h1 className="text-9xl font-bold text-red-500">404</h1>
