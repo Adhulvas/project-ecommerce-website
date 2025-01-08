@@ -316,8 +316,8 @@ export const updateProduct = async (req,res)=> {
 
 export const searchProducts = async(req,res)=>{
   try {
-    const search = req.query.search || '';                         //search: The search term entered by the user.
-    const query = search ? { name: new RegExp(search, 'i') } : {}; //'i': Makes the search case-insensitive.
+    const search = req.query.search || '';                        
+    const query = search ? { name: new RegExp(search, 'i') } : {}; 
     const products = await Product.find(query); 
     res.json(products);
   } catch (error) {
