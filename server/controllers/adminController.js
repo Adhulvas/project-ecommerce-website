@@ -24,9 +24,9 @@ export const adminSignup  = async(req,res,next)=>{
     const token = generateToken(newAdmin,'admin')
 
     res.cookie('token',token, {
-      sameSite: "None",
-      secure: true,
-      httpOnly: true,
+      sameSite: "None", // Cookie works across different domains.
+      secure: true, // Cookie is only sent over HTTPS.
+      httpOnly: true, // Cookie is not accessible via JavaScript on the client side
     })
 
     res.status(200).json({ success:true, message:'signup successful' })
