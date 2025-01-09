@@ -47,7 +47,7 @@ export const ProductDetail = () => {
   
   const handleAddToCart = async () => {
     if (!isUserAuth) {
-      navigate("/login");
+      navigate("/login");  
       return;
     }
 
