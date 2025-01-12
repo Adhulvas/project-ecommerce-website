@@ -185,7 +185,7 @@ export const CheckoutPage = () => {
               <p className="text-red-600">{error}</p>
             ) : (
               <>
-                {cart?.items?.map((item) => (
+                {cart.items?.map((item) => (
                   <div
                     key={item.productId}
                     className="flex items-center space-x-4 mb-4"
@@ -202,13 +202,16 @@ export const CheckoutPage = () => {
                       <p className="text-xs sm:text-sm text-gray-500">
                         Size: {item.size}
                       </p>
+                      <p className="text-xs sm:text-sm text-gray-500">
+                        Qnty: {item.quantity}
+                      </p>
                       <p className="text-red-600 font-semibold">₹{item.price}</p>
                     </div>
                   </div>
                 ))}
                 <div className="flex justify-between mt-4 border-t pt-4">
                   <p className="font-semibold">Total Price:</p>
-                  <p className="text-red-600 font-semibold">₹{cart?.totalPrice}</p>
+                  <p className="text-red-600 font-semibold">₹{cart.totalPrice}</p>
                 </div>
               </>
             )}

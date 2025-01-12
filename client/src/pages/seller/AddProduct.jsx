@@ -15,6 +15,22 @@ export const AddProduct = () => {
     };
     
     const onSubmit = async (data) => {
+        const { price, sizeRequired, availableSizes } = data;
+
+        const numericPrice = parseFloat(price.replace(/,/g, ''));
+        if (numericPrice <= 0) {
+            toast.error('price', { message: 'Price must be a positive number' });
+            return;
+        }
+
+        if (sizeRequired && !availableSizes.trim()) {
+            toast.error('availableSizes', { message: 'Available sizes are required when sizeRequired is checked' });
+            return;
+        }
+        if (!sizeRequired && availableSizes.trim()) {
+            toast.error('sizeRequired', { message: 'Please check sizeRequired if available sizes are provided' });
+            return;
+        }
         
         const formData = new FormData();
         images.forEach((image) => {
@@ -22,11 +38,15 @@ export const AddProduct = () => {
         });
     
         Object.keys(data).forEach((key) => {
-            formData.append(key, data[key]);
+            if (key === 'price') {
+                formData.append(key, numericPrice); 
+            } else {
+                formData.append(key, data[key]);
+            }
         });
     
         try {
-            const response = await axiosInstance.post('product/add-product', formData, {
+             await axiosInstance.post('product/add-product', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

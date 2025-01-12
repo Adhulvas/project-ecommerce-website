@@ -73,6 +73,7 @@ export const ProductDetail = () => {
       });
 
       toast.success(response.data.message || "Product added to cart!");
+
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to add product to cart.");

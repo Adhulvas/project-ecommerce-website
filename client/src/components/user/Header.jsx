@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import { useFetchData } from "../../hooks/useFetch";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearUserData } from "../../redux/features/userSlice";
 import { FaRegUser } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
@@ -25,9 +25,11 @@ export const Header = () => {
   const [isPanelVisible, setIsPanelVisible] = useState(false);
   const [isSearchPanelVisible, setIsSearchPanelVisible] = useState(false);
 
+
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const dropdownRef = useRef(null);
+
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -90,6 +92,7 @@ export const Header = () => {
   const handleDropdownItemClick = () => {
     setDropdownOpen(false);
   };
+
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-gray-900 text-white">

@@ -25,6 +25,17 @@ export const Success = () => {
     fetchCart();
   }, []);
 
+
+  const clearCartAfterPayment = async () => {
+    try {
+      const response = await axiosInstance.delete('/cart/clear-cart');
+      console.log(response.data?.message || "Cart cleared successfully");
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      toast.error(error.response?.data?.message || "Failed to clear cart");
+    }
+  };
+
   
   const handleOrderCreation = async () => {
     try {
@@ -46,6 +57,8 @@ export const Success = () => {
 
       const response = await axiosInstance.post('/order/create-order', orderData);
       console.log('Order created successfully:', response.data);
+
+      await clearCartAfterPayment();
     } catch (error) {
       console.error('Error creating order:', error); 
     }

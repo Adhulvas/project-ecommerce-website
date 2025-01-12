@@ -9,6 +9,27 @@ export const Cart = () => {
   const [cart, loading, error, refetchCart] = useFetchCart("/cart/get-cartItems");
   const navigate = useNavigate()
 
+  const handleQuantityChange = async (productId, newQuantity, size = null) => {
+    if (newQuantity <= 0) {
+      toast.error("Quantity must be at least 1.");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.patch("/cart/update-quantity", {
+        productId,
+        quantity: newQuantity,
+        size,
+      });
+
+      toast.success(response.data?.message || "Quantity updated successfully");
+      await refetchCart();
+    } catch (err) {
+      console.error("Error updating quantity:", err);
+      toast.error(err.response?.data?.message || "Failed to update quantity");
+    }
+  };
+
 
   const handleDeleteItem = async (productId) => {
     try {
@@ -67,12 +88,23 @@ export const Cart = () => {
             />
             <div className="flex-grow px-4 mt-4 sm:mt-0 text-center sm:text-left">
               <h2 className="text-lg font-semibold">{item.productDescription}</h2>
-              <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
               <p className="text-sm text-gray-500">Size: {item.size || "NA"}</p>
               <p className="text-sm text-gray-500">Price: ₹{item.price}</p>
               <p className="text-sm font-bold text-gray-800">
                 Subtotal: ₹{item.subtotal}
               </p>
+              <div className="flex items-center mt-2">
+                <span className="text-sm text-gray-500 mr-2">Quantity:</span>
+                <input
+                  type="number"
+                  min="1"
+                  value={item.quantity}
+                  onChange={(e) => {
+                    handleQuantityChange(item.productId, Number(e.target.value), item.size)}
+                  }
+                  className="border px-2 py-1 w-16 rounded"
+                />
+              </div>
             </div>
 
 
