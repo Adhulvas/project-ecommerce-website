@@ -9,7 +9,6 @@ export const sellerAuth = (req,res,next)=>{
     }
 
     const decodedToken = jwt.verify(token,process.env.JWT_PASSWORD)
-    console.log("Decoded Token:", decodedToken);
 
 
     if(!decodedToken){

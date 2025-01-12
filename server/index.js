@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(cors({
   origin:["http://localhost:5173","https://project-ecommerce-website-client.vercel.app"],
   credentials:true,
-  methods: ["GET","POST","PUT","DELETE"]
+  methods: ["GET","POST","PUT","PATCH","DELETE"]
 }))
 app.use(cookieParser())
 
