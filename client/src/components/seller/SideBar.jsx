@@ -1,11 +1,31 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toggleProductDropdown } from "../../redux/features/dropdownSlice";
+import { axiosInstance } from "../../config/axiosInstance";
+import toast from "react-hot-toast";
 
 export const SideBar = ({ isOpen }) => {
   const dispatch = useDispatch()
   const isProductDropdownOpen = useSelector((state)=>state.dropdown.isProductDropdownOpen)
+
+  const navigate = useNavigate()
+
+
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.put('/seller/logout');
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate('/seller/login')
+      } else {
+        toast.error(response.data.message || "Unexpected response from the server.");
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "An error occurred during logout.";
+      toast.error(errorMessage);
+    }
+  };
 
   return (
     <div
@@ -52,6 +72,15 @@ export const SideBar = ({ isOpen }) => {
           </li>
         </ul>
       </nav>
+
+      <div className="absolute bottom-0 left-0 w-full p-4">
+        <button
+          onClick={handleLogout}
+          className="bg-white text-black py-2 px-4 w-full rounded hover:bg-red-500 hover:text-white"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

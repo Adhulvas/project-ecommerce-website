@@ -10,7 +10,7 @@ export const Wishlist = () => {
   const dispatch = useDispatch();
   const { items: wishlistItems, loading, error } = useSelector((state) => state.wishlist);
   const [loadingItemId, setLoadingItemId] = useState(null);
-  const { addToCart } = useAddToCart();
+  const { addToCartHandler } = useAddToCart();
 
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const Wishlist = () => {
     setLoadingItemId(item._id);
 
     try {
-      await addToCart(productId, size, 1); 
+      await addToCartHandler(productId, size, 1); 
     } catch (err) {
       console.error(err);
       toast.error("Failed to add product to cart");

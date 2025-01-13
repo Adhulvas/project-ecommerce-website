@@ -1,9 +1,12 @@
+import { useDispatch } from "react-redux";
 import { axiosInstance } from "../config/axiosInstance";
 import toast from "react-hot-toast";
+import { addToCart } from "../redux/features/cartSlice";
 
 export const useAddToCart = () => {
+  const dispatch = useDispatch();
 
-  const addToCart = async (productId, size = null, quantity = 1) => {
+  const addToCartHandler = async (productId, size = null, quantity = 1) => {
     if (!productId || quantity <= 0) {
       toast.error("Invalid product or quantity");
       return;
@@ -15,13 +18,17 @@ export const useAddToCart = () => {
         size,
         quantity,
       });
+
+
+      dispatch(addToCart(response.data.cart));
+
       toast.success("Product added to cart successfully!");
       return response.data;
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "Failed to add product to cart";
+      const errorMessage = err.response?.data?.message || "Failed to add product to cartada";
       toast.error(errorMessage);
     }
   };
 
-  return { addToCart };
+  return { addToCartHandler };
 };

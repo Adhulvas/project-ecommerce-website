@@ -7,6 +7,7 @@ export const Orders = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -27,12 +28,12 @@ export const Orders = () => {
     switch (status) {
       case 'Pending':
         return 'text-yellow-500';
-      case 'Processing':
-        return 'text-blue-500';
       case 'Shipped':
-        return 'text-lightblue-500'; 
+        return 'text-violet-500'; 
       case 'Delivered':
         return 'text-green-500';
+      case 'Returned':
+        return 'text-orange-500';
       case 'Cancelled':
         return 'text-red-500';
       default:

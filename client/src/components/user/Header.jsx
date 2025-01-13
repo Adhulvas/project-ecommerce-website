@@ -24,6 +24,7 @@ export const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isPanelVisible, setIsPanelVisible] = useState(false);
   const [isSearchPanelVisible, setIsSearchPanelVisible] = useState(false);
+  const totalCount = useSelector((state) => state.cart.totalCount);
 
 
   const navigate = useNavigate();
@@ -278,8 +279,13 @@ export const Header = () => {
               <Link to="/user/wishlist">
                 <FaRegHeart className="text-xl" />
               </Link>
-              <Link to="/user/cart">
+              <Link to="/user/cart" className="relative">
                 <RiShoppingCart2Line className="text-2xl" />
+                {totalCount > 0 && (
+                  <span className="absolute -top-2 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+                    {totalCount}
+                  </span>
+                )}
               </Link>
             </>
           )}

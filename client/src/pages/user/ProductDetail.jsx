@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../../config/axiosInstance";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { useAddToCart } from "../../hooks/useAddToCart";
 
 export const ProductDetail = () => {
   const { isUserAuth } = useSelector((state) => state.user);
@@ -16,6 +17,7 @@ export const ProductDetail = () => {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isAddingToWishlist, setIsAddingToWishlist] = useState(false);
   const [sizeError, setSizeError] = useState("");
+  const { addToCartHandler } = useAddToCart();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -66,14 +68,7 @@ export const ProductDetail = () => {
     setIsAddingToCart(true);
 
     try {
-      const response = await axiosInstance.post("/cart/add-to-cart", {
-        productId,
-        size: product.sizeRequired ? selectedSize : null,
-        quantity,
-      });
-
-      toast.success(response.data.message || "Product added to cart!");
-
+      await addToCartHandler(productId, product.sizeRequired ? selectedSize : null, quantity);
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || "Failed to add product to cart.");

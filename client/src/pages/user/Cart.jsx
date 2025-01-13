@@ -3,11 +3,14 @@ import { axiosInstance } from "../../config/axiosInstance";
 import remove from '../../assets/delete.svg';
 import { useNavigate } from "react-router-dom";
 import { useFetchCart } from "../../hooks/useFetchCart";
+import { removeItem } from "../../redux/features/cartSlice";
+import { useDispatch } from "react-redux";
 
 
 export const Cart = () => {
   const [cart, loading, error, refetchCart] = useFetchCart("/cart/get-cartItems");
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleQuantityChange = async (productId, newQuantity, size = null) => {
     if (newQuantity <= 0) {
@@ -31,10 +34,12 @@ export const Cart = () => {
   };
 
 
-  const handleDeleteItem = async (productId) => {
+  const handleDeleteItem = async (productId,size) => {
     try {
       const response = await axiosInstance.delete(`/cart/remove-product/${productId}`);
       toast.success(response.data?.message || "Item removed successfully");
+
+      dispatch(removeItem({productId,size}));
 
       await refetchCart();
     } catch (err) {
@@ -108,7 +113,7 @@ export const Cart = () => {
             </div>
 
 
-            <button onClick={() => handleDeleteItem(item.productId)} className="mt-4 sm:mt-0 sm:ml-2">
+            <button onClick={() => handleDeleteItem(item.productId,item.size)} className="mt-4 sm:mt-0 sm:ml-2">
               <img src={remove} alt="Remove" className="w-8 h-8 mx-auto sm:mx-0 cursor-pointer" />
             </button>
           </div>
