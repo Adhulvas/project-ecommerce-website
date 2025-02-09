@@ -181,6 +181,7 @@ export const addNewProduct = async (req, res) => {
       const subcategoryExists = categoryData.subcategories.some(
           (sub) => sub.name.toLowerCase() === subcategory.toLowerCase()
       );
+      
       if (!subcategoryExists) {
           return res.status(404).json({ message: 'Subcategory not found' });
       }

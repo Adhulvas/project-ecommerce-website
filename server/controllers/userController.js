@@ -278,7 +278,7 @@ export const deleteUserAccount = async (req,res) => {
 };
 
 
-export const checkUser = async(req,res,next)=>{
+export const checkUser = async(req,res)=>{
   try {
     res.json({ success:true, message:"user authorized" }) 
   } catch (error) {
