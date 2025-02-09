@@ -42,24 +42,24 @@ export const Signup = ({ role = "user" }) => {
       toast.success("Signup successful");
       navigate(user.homepage_route)
     } catch (error) {
-      toast.error("Signup failed. Please try again.");
+      toast.error(error.response.data.message || "Signup failed. Please try again.");
       console.error(error);
     }
   };
   return (
-    <div className="first-div flex items-center justify-center h-screen w-[90%] max-w-4xl mx-auto">
+    <div className="flex items-center justify-center mt-10 h-screen w-full bg-gradient-to-br from-red-300 to-red-400">
       {/* second-div */}
-      <div className="w-11/12 max-w-5xl bg-red-300 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-6 box-border">
+      <div className="w-full max-w-4xl bg-white rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-4 md:p-6 box-border">
         {/* left-section */}
         <div className="hidden md:flex w-full md:w-1/2 p-1">
           <img src={logincover} alt="Login Cover" className="w-full h-full object-cover rounded-3xl" />
         </div>
 
         {/* right-section */}
-        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-6 py-8 bg-red-300 rounded-lg">
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-6 py-8 bg-white rounded-lg">
           {/* Logo */}
           <div className="w-16 h-16 bg-slate-500 rounded-full flex items-center justify-center mb-6">
-            <img src={logo} alt="Logo" className="w-14 h-14 rounded-full object-cover"/>
+            <img src={logo} alt="Logo" className="w-14 h-14 rounded-full object-cover" />
           </div>
 
           {/* Welcome Message */}
@@ -72,21 +72,21 @@ export const Signup = ({ role = "user" }) => {
               type="text"
               placeholder="Name"
               {...register("name")}
-              className="w-full mb-2 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-2 p-3  border-b-2 border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-indigo-500"
               required
             />
             <input
               type="email"
               placeholder="Email address"
               {...register("email")}
-              className="w-full mb-2 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-2 p-3 border-b-2 border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-indigo-500"
               required
             />
             <input
               type="password"
               placeholder="Password"
               {...register("password")}
-              className="w-full mb-4 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-4 p-3 border-b-2 border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-indigo-500"
               required
             />
             <button className="w-full bg-indigo-500 text-white py-3 rounded-lg hover:bg-indigo-600">

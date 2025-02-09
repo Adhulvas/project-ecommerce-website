@@ -48,15 +48,15 @@ export const Login = ({ role = 'user'}) => {
 
 
   return (
-    <div className="first-div flex items-center justify-center h-screen w-[90%] max-w-4xl mx-auto px-4">
-      <div className="w-full bg-red-300 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-4 md:p-6 box-border">
+    <div className="flex items-center justify-center min-h-screen w-full px-4 mt-10 bg-gradient-to-br from-blue-300 to-indigo-400">
+      <div className="w-full max-w-4xl bg-white rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row p-4 md:p-6 box-border">
         {/* Image Section */}
         <div className="hidden md:flex w-full md:w-1/2 p-1">
-          <img src={logincover} alt="Login Cover" className="w-full h-full object-cover rounded-lg" />
+          <img src={logincover} alt="Login Cover" className="w-full h-full object-cover rounded-3xl" />
         </div>
 
         {/* Form Section */}
-        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-4 py-6 md:px-6 md:py-8 bg-red-300 rounded-lg">
+        <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-4 py-6 md:px-6 md:py-8 bg-white rounded-lg">
           {/* Logo */}
           <div className="w-16 h-16 bg-slate-500 rounded-full flex items-center justify-center mb-6">
             <img src={logo} alt="Logo" className="w-14 h-14 rounded-full object-cover" />
@@ -72,14 +72,14 @@ export const Login = ({ role = 'user'}) => {
               type="text"
               placeholder="Email address"
               {...register('email')}
-              className="w-full mb-4 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-4 p-3 border-b-2 border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-indigo-500"
               required
             />
             <input
               type="password"
               placeholder="Password"
               {...register('password')}
-              className="w-full mb-4 p-3 rounded-lg border border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full mb-4 p-3 border-b-2 border-gray-300 bg-white text-gray-800 focus:outline-none focus:ring-0 focus:border-indigo-500"
               required
             />
             <p className="text-right text-indigo-500 text-sm mb-6 cursor-pointer">Forgot password?</p>

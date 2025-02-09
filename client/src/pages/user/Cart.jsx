@@ -98,7 +98,7 @@ export const Cart = () => {
               <p className="text-sm font-bold text-gray-800">
                 Subtotal: ₹{item.subtotal}
               </p>
-              <div className="flex items-center mt-2">
+              <div className="flex flex-col sm:flex-row justify-center sm:justify-start items-center mt-2">
                 <span className="text-sm text-gray-500 mr-2">Quantity:</span>
                 <input
                   type="number"
@@ -107,7 +107,7 @@ export const Cart = () => {
                   onChange={(e) => {
                     handleQuantityChange(item.productId, Number(e.target.value), item.size)}
                   }
-                  className="border px-2 py-1 w-16 rounded"
+                  className="border px-2 py-1 w-16 rounded text-center"
                 />
               </div>
             </div>
